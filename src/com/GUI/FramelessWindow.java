@@ -24,7 +24,7 @@ public class FramelessWindow extends JFrame {
     public JPanel container = new JPanel();
     public Color bgColor = new Color(238,238,238);
 
-    public RoundPanel paintPad;
+    public CityChessPanel paintPad;
 
     private boolean isPressed = false;
     private void setBtnTranp(JButton button){ //设置按钮背景透明
@@ -36,7 +36,7 @@ public class FramelessWindow extends JFrame {
 //      button.setText(null);//除去按钮的默认名称
         button.setFocusPainted(false);//除去焦点的框
         button.setContentAreaFilled(false);//除去默认的背景填充
-    };
+    }
 
     public  FramelessWindow(){
         //设置布局模式

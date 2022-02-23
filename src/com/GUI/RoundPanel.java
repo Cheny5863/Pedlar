@@ -13,7 +13,9 @@ import javax.swing.Timer;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Insets;
+import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -21,31 +23,32 @@ import java.awt.event.MouseEvent;
 import java.awt.geom.RoundRectangle2D;
 
 public class RoundPanel extends JPanel {
-    private ImageIcon miniBtnIcon = new ImageIcon("images/max.png");
     private static final long serialVersionUID = 1L;
     public Timer timer;
     private int clickTimes = 0;
     int xOld = 0;
     int yOld = 0;
-
+    private int arcw;
+    private int arch;
     private int cityNum = 0;
     JFrame win;
-    ActionListener taskPerformer=new ActionListener()
-    {
+    ActionListener taskPerformer = new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
             //System.out.println("time on");
-            if(clickTimes < 2) {
+            if (clickTimes < 2) {
                 clickTimes = 0;//如果时间到了还没双击那就不算了，此次双击失效
                 timer.stop();
             }
         }
     };
 
-    public RoundPanel() {
+    public RoundPanel(int arcw, int arch) {
         super();
+        this.arch = arch;
+        this.arcw = arcw;
         //初始化定时器
-        timer = new Timer(500,taskPerformer);
+        timer = new Timer(500, taskPerformer);
 
         this.setLayout(null);
         this.addMouseListener(new MouseAdapter() {
@@ -85,36 +88,22 @@ public class RoundPanel extends JPanel {
     public void doubleClick(){
         RoundPanel that = this;
 
-        Thread t = new Thread(new Runnable(){
-            public void run(){
-                // run方法具体重写
-                //画板内双击，事件
-                cityNum++;
-                //System.out.println("检测到双击");
-
-                /*加按钮*/
-                CityBtn btn = new CityBtn(Integer.toString(cityNum));
-                btn.setBounds(xOld,yOld,50,50);//设置按钮位置
-
-                //btn.label.setBounds(0,0,50,40);
-
-                btn.setBackground(Color.orange);
-                that.add(btn);
-                that.repaint();//重新绘制 不然会出现需要鼠标滑过才显示的问题
-            }});
-        t.start();
-
     }
 
     @Override
     public void paint(Graphics g) {
+        //设置抗锯齿
+        Graphics2D g2d = (Graphics2D) g;
+        //g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
         int fieldX = 0;
         int fieldY = 0;
         int fieldWeight = getSize().width;
         int fieldHeight = getSize().height;
-        RoundRectangle2D rect = new RoundRectangle2D.Double(fieldX, fieldY, fieldWeight, fieldHeight, 20, 20);
-        g.setClip(rect);
-        super.paint(g);
+        RoundRectangle2D rect = new RoundRectangle2D.Double(fieldX, fieldY, fieldWeight, fieldHeight, arcw, arch);
+        g2d.setClip(rect);
+        super.paint(g2d);
     }
     private void setBtnTranp(JButton button){ //设置按钮背景透明
         // 隐藏按钮各属性的设置
@@ -125,5 +114,5 @@ public class RoundPanel extends JPanel {
 //      button.setText(null);//除去按钮的默认名称
         button.setFocusPainted(false);//除去焦点的框
         button.setContentAreaFilled(false);//除去默认的背景填充
-    };
+    }
 }

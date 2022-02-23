@@ -33,12 +33,11 @@ public class CityBtn extends JButton{
     CityBtn(String str){
         super();
         parent = (RoundPanel) this.getParent();
-        // 获取按钮的最佳大小
-//        size.width = size.height = Math.max(size.width, size.height);
         label = new JLabel(str);
 
-        setPreferredSize(new Dimension(30,30));
-        Font font = new Font("微软雅黑",Font.BOLD,16);
+        setPreferredSize(new Dimension(btnWidth, btnHeight));
+        setSize(btnWidth, btnHeight);
+        Font font = new Font("微软雅黑", Font.BOLD, 16);
         label.setFont(font);
         label.setForeground(Color.BLACK);
         label.setVisible(true);
@@ -83,14 +82,16 @@ public class CityBtn extends JButton{
                     int shrinkPixel = 10;//缩小一周的宽度
                     r.x += shrinkPixel;
                     r.y += shrinkPixel;
-                    r.width -= 2*shrinkPixel;
-                    r.height -= 2*shrinkPixel;
-                    if(!r.contains(xx + getWidth()/2,yy + getHeight()/2)){
-                        CityBtn.this.setLocation(lastX, lastY);//设置拖拽后，窗口的位置
+                    r.width -= 2 * shrinkPixel;
+                    r.height -= 2 * shrinkPixel;
+                    if (!r.contains(xx + getWidth() / 2, yy + getHeight() / 2)) {
+                        CityBtn.this.setLocation(lastX, lastY);
+
                         return;
-                    };
+                    }
 
                     CityBtn.this.setLocation(xx, yy);//设置拖拽后，窗口的位置
+                    label.setLocation(xx + 5, yy + getHeight() / 2 + 5);//设置文本拖拽后的位置
                     lastX = xx;
                     lastY = yy;
                 }

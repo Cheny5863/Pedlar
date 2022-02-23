@@ -19,6 +19,7 @@ public class ShadowBorder extends JPanel {
 
     public ShadowBorder(int pix) {
         this.pixels = pix;
+
         Border border = BorderFactory.createEmptyBorder(pixels, pixels, pixels, pixels);
         this.setBorder(BorderFactory.createCompoundBorder(this.getBorder(), border));
         this.setLayout(new BorderLayout());
@@ -40,7 +41,6 @@ public class ShadowBorder extends JPanel {
      * @param g     绘图对象
      * @param shade 颜色值
      * @param i     边框层次
-     * @return: void
      */
     private void drawShadow(Graphics g, int shade, int i, int opacity) {
         System.out.println(opacity);
