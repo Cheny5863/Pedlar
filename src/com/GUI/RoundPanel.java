@@ -28,8 +28,8 @@ public class RoundPanel extends JPanel {
     private int clickTimes = 0;
     int xOld = 0;
     int yOld = 0;
-    private int arcw;
-    private int arch;
+    private int arcw = 0;
+    private int arch = 0;
     private int cityNum = 0;
     JFrame win;
     ActionListener taskPerformer = new ActionListener() {
@@ -91,7 +91,7 @@ public class RoundPanel extends JPanel {
     }
 
     @Override
-    public void paint(Graphics g) {
+    public void paintComponent(Graphics g) {
         //设置抗锯齿
         Graphics2D g2d = (Graphics2D) g;
         //g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
@@ -99,11 +99,11 @@ public class RoundPanel extends JPanel {
 
         int fieldX = 0;
         int fieldY = 0;
-        int fieldWeight = getSize().width;
+        int fieldWidth = getSize().width;
         int fieldHeight = getSize().height;
-        RoundRectangle2D rect = new RoundRectangle2D.Double(fieldX, fieldY, fieldWeight, fieldHeight, arcw, arch);
+        RoundRectangle2D rect = new RoundRectangle2D.Double(fieldX, fieldY, fieldWidth, fieldHeight, arcw, arch);
         g2d.setClip(rect);
-        super.paint(g2d);
+        super.paintComponent(g2d);
     }
     private void setBtnTranp(JButton button){ //设置按钮背景透明
         // 隐藏按钮各属性的设置

@@ -39,7 +39,7 @@ public class CityBtn extends JButton{
         setSize(btnWidth, btnHeight);
         Font font = new Font("微软雅黑", Font.BOLD, 16);
         label.setFont(font);
-        label.setForeground(Color.BLACK);
+        label.setForeground(new Color(116, 169, 181));
         label.setVisible(true);
         setContentAreaFilled(false);
         this.setBorderPainted(false); // 不绘制边框
