@@ -33,7 +33,7 @@ public class CityChessPanel extends RoundPanel {
                 btn.setBounds(xOld, yOld, btn.getWidth(), btn.getHeight());//设置按钮位置
 
                 //btn.setLocation(xOld,yOld); //直接设置位置不生效
-                btn.label.setBounds(xOld + 5, yOld + btn.getHeight() / 2 + 5, 50, 40);
+                btn.label.setBounds(xOld, yOld + btn.getHeight() / 2 + 5, btn.getWidth(), 40);
 
                 btn.setBackground(Color.orange);
 

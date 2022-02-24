@@ -3,6 +3,7 @@ package com.GUI;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.SwingConstants;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -44,7 +45,7 @@ public class CityBtn extends JButton{
         setContentAreaFilled(false);
         this.setBorderPainted(false); // 不绘制边框
         this.setFocusPainted(false); // 不绘制焦点状态
-
+        label.setHorizontalAlignment(SwingConstants.CENTER);
         //鼠标单击点击事件
         this.addMouseListener(new MouseAdapter() {
             @Override
@@ -91,7 +92,7 @@ public class CityBtn extends JButton{
                     }
 
                     CityBtn.this.setLocation(xx, yy);//设置拖拽后，窗口的位置
-                    label.setLocation(xx + 5, yy + getHeight() / 2 + 5);//设置文本拖拽后的位置
+                    label.setLocation(xx, yy + getHeight() / 2 + 5);//设置文本拖拽后的位置
                     lastX = xx;
                     lastY = yy;
                 }

@@ -1,16 +1,12 @@
 package com.GUI;
 
 import javax.swing.JButton;
-import javax.swing.Timer;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Insets;
 import java.awt.RenderingHints;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.geom.RoundRectangle2D;
 
 public class RoundBtn extends JButton {
     private int arcw;
@@ -21,6 +17,7 @@ public class RoundBtn extends JButton {
         this.arch = arch;
         this.arcw = arcw;
         this.setPreferredSize(new Dimension(width, height));
+        this.setSize(new Dimension(width, height));
         setContentAreaFilled(false);
         this.setBorderPainted(false); // 不绘制边框
         this.setFocusPainted(false); // 不绘制焦点状态

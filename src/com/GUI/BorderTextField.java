@@ -37,6 +37,7 @@ public class BorderTextField extends JTextField {
         if (enablePlaceHolder)
             setText(stringPlaceHold);
         BorderTextField that = this;
+        this.setBackground(null);
         this.addFocusListener(new FocusListener() {
 
             public void focusGained(FocusEvent e) {
@@ -50,8 +51,11 @@ public class BorderTextField extends JTextField {
             public void focusLost(FocusEvent e) {
                 //失去焦点时，用户尚未在文本框内输入任何内容，所以依旧显示提示文字
                 if (that.getText().equals("")) {
-                    that.setForeground(Color.WHITE); //将提示文字设置为白色
-                    that.setText(stringPlaceHold);     //显示提示文字
+                    if (enablePlaceHolder) {
+                        that.setForeground(Color.WHITE); //将提示文字设置为白色
+                        that.setText(stringPlaceHold);     //显示提示文字
+                    }
+
                 }
             }
 

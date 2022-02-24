@@ -14,7 +14,6 @@ public class FramelessWindow extends JFrame {
     //private ImageIcon bgImage = new ImageIcon("images/bg.png");
     //用于处理拖动事件，表示鼠标按下时的坐标，相对于JFrame
     private ImageIcon miniBtnIcon = new ImageIcon("images/max.png");
-    private ImageIcon maxBtnIcon = new ImageIcon("images/mini.png");
     private ImageIcon closeBtnIcon = new ImageIcon("images/close.png");
     private int xOld = 0;
     private int yOld = 0;
@@ -89,14 +88,9 @@ public class FramelessWindow extends JFrame {
         mainPanel.setLayout(new FlowLayout(FlowLayout.RIGHT, 10, 10));
 
         //最小化按钮
-        JButton miniBtn = new JButton(maxBtnIcon);
+        JButton miniBtn = new JButton(miniBtnIcon);
         mainPanel.add(miniBtn);
         setBtnTranp(miniBtn);
-
-        //最大化按钮
-        JButton maxBtn = new JButton(miniBtnIcon);
-        mainPanel.add(maxBtn);
-        setBtnTranp(maxBtn);
 
         //关闭按钮
         JButton closeBtn = new  JButton(closeBtnIcon);
@@ -112,12 +106,6 @@ public class FramelessWindow extends JFrame {
             }
         });
 
-        maxBtn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-            }
-        });
 
         miniBtn.addActionListener(new ActionListener() {
             @Override
