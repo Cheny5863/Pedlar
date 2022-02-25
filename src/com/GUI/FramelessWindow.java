@@ -114,18 +114,13 @@ public class FramelessWindow extends JFrame {
             }
         });
 
-        setUndecorated(true);
         setLocationRelativeTo(null);
 
 
         //设置边框圆角
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        JFrame.setDefaultLookAndFeelDecorated(true);
-        AWTUtilities.setWindowShape(this, new RoundRectangle2D.Double(
-
-                0.0D, 0.0D, this.getWidth(), this.getHeight(), 38.0D,
-
-                38.0D));
+        setUndecorated(true);
+        setShape(new RoundRectangle2D.Double(0, 0, this.getWidth(), this.getHeight(), 38, 38));
     }
 
 

@@ -136,9 +136,11 @@ public class Main {
         btnInputConfirm.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                //点击后禁用确认按键
+                btnInputConfirm.setEnabled(false);
                 FramelessPanel frameInput = new FramelessPanel(270, 430);
-                frameInput.setBounds(w.getBounds().x + w.getWidth() / 2 - 135, w.getBounds().y + w.getHeight() / 2 - 215, 270, 430);
 
+                frameInput.setBounds(w.getBounds().x + w.getWidth() / 2 - 135, w.getBounds().y + w.getHeight() / 2 - 215, 270, 430);
                 frameInput.getContentPane().setBackground(new Color(175, 217, 209));
                 //frameInput.setBackground(Color.black);
                 frameInput.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 20));
@@ -153,7 +155,7 @@ public class Main {
                 textCityName.setPreferredSize(new Dimension(200, 25));
 
 
-                RoundTextArea textAreaCityInfo = new RoundTextArea(20, 20, 200, 200);
+                RoundTextArea textAreaCityInfo = new RoundTextArea(20, 20, 200, 200, true, "请输入城市信息");
                 textAreaCityInfo.setBackground(new Color(157, 189, 183));
                 textAreaCityInfo.textAreaCityInfo.setBackground(new Color(157, 189, 183));
                 textAreaCityInfo.setPreferredSize(new Dimension(200, 250));
@@ -184,6 +186,16 @@ public class Main {
                 panelBottom.add(btnCancel);
                 panelBottom.add(Box.createHorizontalStrut(40));
                 panelBottom.add(btnConfirm);
+
+
+                btnCancel.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        btnInputConfirm.setEnabled(true);
+                        btnInputConfirm.setBackground(Color.lightGray);
+                        frameInput.dispose();
+                    }
+                });
 
                 frameInput.add(labelTitle);
                 frameInput.add(panelTop);
@@ -223,7 +235,7 @@ public class Main {
         curCityBottom.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 0));
 
         //设置文本域的参数
-        RoundTextArea roundTextArea = new RoundTextArea(20, 20, 180, 80);
+        RoundTextArea roundTextArea = new RoundTextArea(20, 20, 180, 80, false, null);
         roundTextArea.textAreaCityInfo.setBackground(new Color(163, 204, 202));
         roundTextArea.textAreaCityInfo.setForeground(Color.white);
         //roundTextArea.textAreaCityInfo.setEditable(false);
@@ -300,7 +312,7 @@ public class Main {
         logTop.setPreferredSize(new Dimension(rightPanel.getWidth(), 50));
         logBottom.setPreferredSize(new Dimension(rightPanel.getWidth(), 760));
 
-        RoundTextArea textAreaLog = new RoundTextArea(20, 20, 170, 570);
+        RoundTextArea textAreaLog = new RoundTextArea(20, 20, 170, 570, true, "请输入城市信息");
         textAreaLog.setBackground(new Color(163, 204, 202));
         textAreaLog.textAreaCityInfo.setBackground(new Color(163, 204, 202));
         textAreaLog.textAreaCityInfo.setFont(new Font("微软雅黑", Font.BOLD, 16));

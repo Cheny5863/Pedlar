@@ -22,7 +22,7 @@ import java.awt.geom.RoundRectangle2D;
 public class FramelessPanel extends JFrame {
     private int xOld = 0;
     private int yOld = 0;
-
+    public RoundBtn btnLastLayer;
     public void setMenuBarHeight(int menuBarHeight) {
         this.menuBarHeight = menuBarHeight;
     }
@@ -74,17 +74,12 @@ public class FramelessPanel extends JFrame {
             }
         });
 
-        setUndecorated(true);
         setLocationRelativeTo(null);
 
 
         //设置边框圆角
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        JFrame.setDefaultLookAndFeelDecorated(true);
-        AWTUtilities.setWindowShape(this, new RoundRectangle2D.Double(
-
-                0.0D, 0.0D, this.getWidth(), this.getHeight(), 20,
-
-                20));
+        setUndecorated(true);
+        setShape(new RoundRectangle2D.Double(0, 0, this.getWidth(), this.getHeight(), 38, 38));
     }
 }
