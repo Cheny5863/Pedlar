@@ -1,5 +1,7 @@
 package com.GUI;
 
+import sun.awt.windows.ThemeReader;
+
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -56,7 +58,6 @@ public class CityChessPanel extends RoundPanel {
     public CityChessPanel(int arcw, int arch, MainWindow frameMainWindow) {
         super(arcw, arch);
         this.frameMainWindow = frameMainWindow;
-
         addMouseMotionListener(new MouseAdapter() {
             @Override
             public void mouseMoved(MouseEvent e) {
@@ -95,7 +96,62 @@ public class CityChessPanel extends RoundPanel {
             ) {
                 for (ArcInfo arcInfoTemp : btnTemp.listArcInfo
                 ) {
-                    graphics.drawLine(btnTemp.getX() + btnTemp.getWidth() / 2, btnTemp.getY() + btnTemp.getHeight() / 2, arcInfoTemp.getmTarget().getX() + arcInfoTemp.getmTarget().getWidth() / 2, arcInfoTemp.getmTarget().getY() + arcInfoTemp.getmTarget().getHeight() / 2);
+                    //线的起点和终点计算算法：
+                    //分两类情况：1.斜率不存在 2.斜率存在
+                    //1.那么x1 = x2,假定y1>y2 那么y1在下方,那么起点和终点分别为(x1 + (getWidth()/2), y1 + (getHeight()/2)-(getHeight()/2) (x2 + (getWidth()/2), y2 + (getHeight()/2) + (getHeight()/2))
+                    //2.那么x1 != x2, 假定y1 > y2 ,计算出斜率k = (y2-y1)/(x2-x1) 按钮的半径r 那么起点和终点分别为:
+                    // (x1 + (getWidth()/2), y1 + (getHeight()/2)-(getHeight()/2)      (x2 + (getWidth()/2), y2 + (getHeight()/2) + (getHeight()/2)
+                    int x1 = btnTemp.getX() + btnTemp.getWidth() / 2;
+                    int y1 = btnTemp.getY() + btnTemp.getHeight() / 2;
+                    int x2 = arcInfoTemp.getmTarget().getX() + arcInfoTemp.getmTarget().getWidth() / 2;
+                    int y2 = arcInfoTemp.getmTarget().getY() + arcInfoTemp.getmTarget().getHeight() / 2;
+                    double radius = btnTemp.getWidth() / 2;
+                    double theta = Math.PI / 2;
+                    if (x1 != x2) {
+                        double k = (double) (y1 - y2) / (double) (x2 - x1);
+                        theta = Math.atan(k);
+                    }
+
+                    if (theta > 0) {
+                        if (y1 >= y2) {
+                            y1 -= radius * Math.sin(theta);
+                            x1 += radius * Math.cos(theta);
+
+                            y2 += radius * Math.sin(theta);
+                            x2 -= radius * Math.cos(theta);
+                        } else {
+                            y2 -= radius * Math.sin(theta);
+                            x2 += radius * Math.cos(theta);
+
+                            y1 += radius * Math.sin(theta);
+                            x1 -= radius * Math.cos(theta);
+                        }
+                    } else if (theta < 0) {
+                        if (y1 >= y2) {
+                            y1 -= radius * Math.sin(-theta);
+                            x1 -= radius * Math.cos(-theta);
+
+                            y2 += radius * Math.sin(-theta);
+                            x2 += radius * Math.cos(-theta);
+                        } else {
+                            y2 -= radius * Math.sin(-theta);
+                            x2 -= radius * Math.cos(-theta);
+
+                            y1 += radius * Math.sin(-theta);
+                            x1 += radius * Math.cos(-theta);
+                        }
+
+                    } else {
+                        if (x1 > x2) {
+                            x1 -= radius;
+                            x2 += radius;
+                        } else {
+                            x1 += radius;
+                            x2 -= radius;
+                        }
+                    }
+                    //System.out.println(theta);
+                    graphics.drawLine(x1, y1, x2, y2);
                     repaint();
                 }
             }
@@ -126,7 +182,7 @@ public class CityChessPanel extends RoundPanel {
                 frameMainWindow.textFieldCityName.setText("");
                 frameMainWindow.roundTextArea.textAreaCityInfo.setText("");
                 listCityBtn.add(btn);
-                that.add(btn);
+                that.add(btn, 0);
                 that.add(btn.labelCityName);
                 that.repaint();//重新绘制 不然会出现需要鼠标滑过才显示的问题
             }
