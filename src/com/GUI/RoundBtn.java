@@ -37,6 +37,8 @@ public class RoundBtn extends JButton {
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         if (getModel().isArmed()) {
             g2d.setColor(Color.LIGHT_GRAY); // 点击时高亮
+        } else if (getModel().isEnabled() == false) {
+            g2d.setColor(new Color(206, 206, 206));
         } else {
             g2d.setColor(new Color(103, 223, 136));
         }

@@ -23,8 +23,6 @@ public class FramelessWindow extends JFrame {
     public JPanel container = new JPanel();
     public Color bgColor = new Color(238,238,238);
 
-    public CityChessPanel paintPad;
-
     private boolean isPressed = false;
     private void setBtnTranp(JButton button){ //设置按钮背景透明
         // 隐藏按钮各属性的设置
