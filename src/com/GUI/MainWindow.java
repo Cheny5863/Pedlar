@@ -11,8 +11,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -20,7 +18,10 @@ public class MainWindow extends FramelessWindow {
     public CityChessPanel paintPad;//画板
     public RoundPanel controller;//控制区
     public RoundPanel inputCityArea, curCityArea, departureArea;//控制区的三个小功能区
-    JPanel logTop, logBottom;//log区的上下两部分
+    public JPanel logTop, logBottom;//log区的上下两部分
+    public BorderTextField textFieldCityName;
+    public RoundTextArea roundTextArea;
+    public CityBtn cityBtnCurrent = null;
 
     public MainWindow() {
         super();
@@ -40,7 +41,7 @@ public class MainWindow extends FramelessWindow {
 
         //左容器内容 = 上（画板） + 下（控制台）
         //画板
-        paintPad = new CityChessPanel(20, 20);
+        paintPad = new CityChessPanel(20, 20, this);
         paintPad.setBackground(Color.white);
         paintPad.setPreferredSize(new Dimension(leftPanel.getWidth(), 700));
         JFrame.setDefaultLookAndFeelDecorated(true);
@@ -199,43 +200,63 @@ public class MainWindow extends FramelessWindow {
         JPanel curCityTop, curCityBottom;
         curCityTop = new JPanel();
         curCityBottom = new JPanel();
-        controller.add(curCityTop);
-        controller.add(curCityBottom);
         //设置上下两部分的属性
         curCityTop.setBackground(null);
         curCityBottom.setBackground(null);
-        curCityTop.setPreferredSize(new Dimension(curCityArea.getWidth(), 20));
+        curCityTop.setPreferredSize(new Dimension(curCityArea.getWidth(), 30));
         curCityBottom.setPreferredSize(new Dimension(curCityArea.getWidth(), 400));
         //设置标题和文字大小
-        curCityTop.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 10));
+        curCityTop.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 4));
+
         JLabel titleCurCityArea = new JLabel("当前城市:");
-        JLabel labelCityName = new JLabel("合肥");
-        labelCityName.setFont(new Font("微软雅黑", Font.BOLD, 15));
-        labelCityName.setForeground(new Color(103, 223, 136));
+        textFieldCityName = new BorderTextField(5, false, null);
+        textFieldCityName.setPreferredSize(new Dimension(100, 30));
+        textFieldCityName.setFont(new Font("微软雅黑", Font.BOLD, 15));
+        textFieldCityName.setHorizontalAlignment(SwingConstants.CENTER);
+        textFieldCityName.setForeground(new Color(103, 223, 136));
         titleCurCityArea.setFont(new Font("微软雅黑", Font.BOLD, 15));
         titleCurCityArea.setForeground(Color.white);
         //将标题添加至panel
         curCityTop.add(titleCurCityArea);
-        curCityTop.add(labelCityName);
+        curCityTop.add(textFieldCityName);
         curCityArea.add(curCityTop);
+        curCityArea.add(Box.createVerticalStrut(10));
         curCityArea.add(curCityBottom);
 
         //当前城市下部分组件
         curCityBottom.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 0));
 
         //设置文本域的参数
-        RoundTextArea roundTextArea = new RoundTextArea(20, 20, 180, 80, false, null);
+        roundTextArea = new RoundTextArea(20, 20, 180, 80, false, null);
         roundTextArea.textAreaCityInfo.setBackground(new Color(163, 204, 202));
         roundTextArea.textAreaCityInfo.setForeground(Color.white);
-        roundTextArea.textAreaCityInfo.setEditable(false);
+        //roundTextArea.textAreaCityInfo.setEditable(false);
         roundTextArea.textAreaCityInfo.setFont(new Font("微软雅黑", Font.BOLD, 12));
+        roundTextArea.setAutoscrolls(true);
         roundTextArea.setBackground(new Color(163, 204, 202));
-        RoundBtn btnDeleConfirm = new RoundBtn(20, 20, 60, 30);
+        RoundBtn btnDeleConfirm = new RoundBtn(20, 20, 60, 20);
         btnDeleConfirm.setBackground(new Color(103, 223, 136));
         btnDeleConfirm.setText("删除");
-        //将录入区的搜索栏和按钮放入容器
+
+        RoundBtn btnRevise = new RoundBtn(20, 20, 60, 30);
+        btnRevise.setBackground(new Color(103, 223, 136));
+        btnRevise.setText("修改");
+
+        btnRevise.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                cityBtnCurrent.labelCityName.setText(textFieldCityName.getText());
+                cityBtnCurrent.setStrCityInfo(roundTextArea.textAreaCityInfo.getText());
+            }
+        });
+
+        Box boxBtnContainer = new Box(BoxLayout.Y_AXIS);
+        boxBtnContainer.add(btnRevise);
+        boxBtnContainer.add(Box.createVerticalStrut(20));
+        boxBtnContainer.add(btnDeleConfirm);
+
         curCityBottom.add(roundTextArea);
-        curCityBottom.add(btnDeleConfirm);
+        curCityBottom.add(boxBtnContainer);
 
 
         //出发区内部组件

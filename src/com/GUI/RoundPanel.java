@@ -47,28 +47,32 @@ public class RoundPanel extends JPanel {
         this.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                clickTimes++;//每点一次点击次数加1
-                xOld = e.getX();//记录鼠标按下时的坐标
-                yOld = e.getY();
+                if (e.getButton() == 1) {
+                    clickTimes++;//每点一次点击次数加1
+                    xOld = e.getX();//记录鼠标按下时的坐标
+                    yOld = e.getY();
 
 
-                if (!timer.isRunning());//如果定时器未启动就启动
+                    if (!timer.isRunning()) ;//如果定时器未启动就启动
                     timer.start();
 
-                if (clickTimes == 2) {//如果检测到双击
-                    //这里执行双击事件
-                    //System.out.println("检测到双击");
-                    //System.out.println(getBounds());
-                    //System.out.println(xOld + " : " + yOld);
-                    if (getBounds().contains(xOld, yOld)) {
-                        //检测到画板内双击
-                        doubleClick();
+                    if (clickTimes == 2) {//如果检测到双击
+                        //这里执行双击事件
+                        //System.out.println("检测到双击");
+                        //System.out.println(getBounds());
+                        //System.out.println(xOld + " : " + yOld);
+                        if (getBounds().contains(xOld, yOld)) {
+                            //检测到画板内双击
+                            doubleClick();
 
+                        }
+
+                        timer.stop();
+                        clickTimes = 0;
                     }
 
-                    timer.stop();
-                    clickTimes = 0;
                 }
+
             }
 
         });
