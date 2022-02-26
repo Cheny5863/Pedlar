@@ -218,14 +218,23 @@ public class CityChessPanel extends RoundPanel {
                 temp.listArcInfo) { //从当前按钮的边列表里面找到边信息
             for (ArcInfo temp2 :
                     arcInfo.getmTarget().listArcInfo) { //以待删除节点为起点的边，并获取边终点
-                if (temp2.getmTarget() == temp) {
-                    arcInfo.getmTarget().listArcInfo.remove(temp2);//将边终点进行反向删除（即删除以待删除节点为起点的边）
+                if (arcInfo.equal(temp2)) {
+                    arcInfo.getmTarget().listArcInfo.remove(temp2);//将边终点进行反向删除（即删除以待删除节点为终点的边
+                    if (temp2.isIfDraw())
+                        remove(temp2.getTextFieldOnArc());
                     break;
                 }
             }
         }
-        listCityBtn.remove(temp); //把边关系清理干净后删除按钮本身
-        this.remove(temp);
+        for (ArcInfo arcInfoTemp :
+                temp.listArcInfo) {
+            if (arcInfoTemp.isIfDraw())
+                frameMainWindow.paintPad.remove(arcInfoTemp.getTextFieldOnArc());
+        }
+
+        this.remove(temp); //从显示面板上去掉它
+        listCityBtn.remove(temp); //删除按钮对象
+
 
         if (listCityBtn.isEmpty()) {
             frameMainWindow.cityBtnCurrent = null;

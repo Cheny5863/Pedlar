@@ -243,7 +243,6 @@ public class CityBtn extends JButton {
         return shape.contains(x, y);
     }
 
-
     private boolean addArcToVel(CityBtn target, int distance, boolean ifDraw) { //将info无重复地加到btn内
         ArcInfo arcInfo = new ArcInfo(this, target, ifDraw, 0);
         //将画板的指针给到输入框这样输入框输入时画板不会刷新

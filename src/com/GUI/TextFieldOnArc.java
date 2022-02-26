@@ -47,6 +47,7 @@ public class TextFieldOnArc extends JTextField {
         timer = new Timer(500, taskPerformer);
         setBorder(null);
         setBackground(null);
+        setOpaque(true);
         this.addFocusListener(new FocusListener() {
 
             public void focusGained(FocusEvent e) {
