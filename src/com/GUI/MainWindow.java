@@ -122,9 +122,12 @@ public class MainWindow extends FramelessWindow {
         //录入区下半部分的组件
         inputAreaBottom.setLayout(new FlowLayout(FlowLayout.CENTER, 15, 25));
         BorderTextField inputCity = new BorderTextField(20, true, "请输入录入城市个数");
+        inputCity.setNumOnly(true);
         inputCity.setPreferredSize(new Dimension(200, 30));
         inputCity.setBackground(null);
         inputCity.setForeground(Color.white);
+        inputCity.setFrameMainWindow(this);
+        inputCity.setMaxInputNum(3);
         RoundBtn btnInputConfirm = new RoundBtn(20, 20, 60, 30);
         btnInputConfirm.setBackground(Color.black);
         btnInputConfirm.setText("确认");
@@ -132,6 +135,7 @@ public class MainWindow extends FramelessWindow {
         inputAreaBottom.add(inputCity);
         inputAreaBottom.add(btnInputConfirm);
         //录入区确认按钮的点击事件
+
         btnInputConfirm.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
