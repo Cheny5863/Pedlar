@@ -1,8 +1,5 @@
 package com.GUI;
 
-import javafx.scene.shape.Arc;
-
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
@@ -23,7 +20,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.awt.geom.Ellipse2D;
-import java.security.PublicKey;
 import java.util.ArrayList;
 
 public class CityBtn extends JButton {
@@ -39,6 +35,8 @@ public class CityBtn extends JButton {
     private int startY = 0;
     private int lastX = 0;
     private int lastY = 0;
+
+
     private int id = 0;
     private String strCityInfo = new String();
     public ArrayList<ArcInfo> listArcInfo = new ArrayList<>();
@@ -47,6 +45,14 @@ public class CityBtn extends JButton {
 
     public String getStrCityInfo() {
         return strCityInfo;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public void setStrCityInfo(String strCityInfo) {
@@ -104,23 +110,24 @@ public class CityBtn extends JButton {
                     timer.start();
                     if (frameMainWindow.paintPad.isSettingArc()) {//在设置边的情况下按钮被点击了说明被点击的这个按钮是终点
                         if (that.id == frameMainWindow.cityBtnCurrent.id) {
-                            System.out.println("不能设置自己到自己");
+                            frameMainWindow.logToWindow("不能设置自己到自己");
                             frameMainWindow.paintPad.setSettingArc(false);
                             return;
                         }
                         //添加边到当前城市
-                        if (frameMainWindow.cityBtnCurrent.addArcToVel(new ArcInfo(that, 0))) {
-                            System.out.println("添加成功");
-                            that.addArcToVel(new ArcInfo(frameMainWindow.cityBtnCurrent, 0));//添加成功则添加反向的边
+                        if (frameMainWindow.cityBtnCurrent.addArcToVel(that, 0, true)) {
+                            frameMainWindow.logToWindow("添加成功");
+                            that.addArcToVel(frameMainWindow.cityBtnCurrent, 0, false);//添加成功则添加反向的边
                         } else {
-                            System.out.println("边重复");
+                            frameMainWindow.logToWindow("边重复");
                         }
                         ;
+
                         frameMainWindow.paintPad.setSettingArc(false);
                     } else {
                         frameMainWindow.cityBtnCurrent = that;
                         frameMainWindow.textFieldCityName.setText(labelCityName.getText());
-                        frameMainWindow.roundTextArea.textAreaCityInfo.setText(strCityInfo);
+                        frameMainWindow.roundTextArea.textAreaReal.setText(strCityInfo);
                         Component cp = (Component) e.getSource(); //获取事件e的触发源
                         //当鼠标点下的时候记录组件当前的坐标与鼠标当前在屏幕的位置
                         //System.out.println(cp.getX() + "  "+cp.getY());
@@ -237,16 +244,20 @@ public class CityBtn extends JButton {
     }
 
 
-    private boolean addArcToVel(ArcInfo info) { //将info无重复地加到btn内
-        for (ArcInfo temp :
+    private boolean addArcToVel(CityBtn target, int distance, boolean ifDraw) { //将info无重复地加到btn内
+        ArcInfo arcInfo = new ArcInfo(this, target, ifDraw, 0);
+        //将画板的指针给到输入框这样输入框输入时画板不会刷新
+        if (ifDraw)
+            arcInfo.setTextFieldOnArc(new TextFieldOnArc(frameMainWindow, arcInfo));
+        for (ArcInfo tempArc :
                 this.listArcInfo) {
-            if (temp.getmTarget().id == info.getmTarget().id) {//已经添加过这条边，就不加了
+            if (tempArc.equal(arcInfo)) {//已经添加过这条边，就不加了
                 System.out.println("已经添加过这条边");
                 frameMainWindow.paintPad.setSettingArc(false);
                 return false;
             }
         }
-        this.listArcInfo.add(info);
+        this.listArcInfo.add(arcInfo);
         return true;
     }
 }

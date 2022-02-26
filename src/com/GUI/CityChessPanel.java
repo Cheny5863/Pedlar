@@ -16,8 +16,6 @@ import java.awt.Point;
 import java.awt.RenderingHints;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.security.PublicKey;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -25,8 +23,18 @@ public class CityChessPanel extends RoundPanel {
     private int cityNum = 0;
     private Point pointStart = new Point();
     private boolean isSettingArc = false;
-    private ArrayList<CityBtn> listCityBtn = new ArrayList<>();
+    public ArrayList<CityBtn> listCityBtn = new ArrayList<>();
     public MainWindow frameMainWindow;
+    private boolean isInputing = false;
+
+    public boolean isInputing() {
+        return isInputing;
+    }
+
+
+    public void setInputing(boolean inputing) {
+        isInputing = inputing;
+    }
 
 
     private Point pointEndLast = new Point();
@@ -64,8 +72,8 @@ public class CityChessPanel extends RoundPanel {
                 super.mouseMoved(e);
                 if (isSettingArc) {
                     pointEndLast = e.getPoint();
-                }
 
+                }
             }
         });
 
@@ -91,11 +99,19 @@ public class CityChessPanel extends RoundPanel {
         if (isSettingArc) {
             graphics.drawLine(pointStart.x, pointStart.y, pointEndLast.x, pointEndLast.y);
             repaint();
+        } else if (isInputing) {
+            //如果正在输入中就不刷新了，因为一刷新输入框就没办法输入
+
         } else {
             for (CityBtn btnTemp : listCityBtn
             ) {
                 for (ArcInfo arcInfoTemp : btnTemp.listArcInfo
                 ) {
+                    if (!arcInfoTemp.isIfDraw()) {//画不画
+                        //System.out.println("skip");
+                        continue;
+                    }
+
                     //线的起点和终点计算算法：
                     //分两类情况：1.斜率不存在 2.斜率存在
                     //1.那么x1 = x2,假定y1>y2 那么y1在下方,那么起点和终点分别为(x1 + (getWidth()/2), y1 + (getHeight()/2)-(getHeight()/2) (x2 + (getWidth()/2), y2 + (getHeight()/2) + (getHeight()/2))
@@ -150,8 +166,11 @@ public class CityChessPanel extends RoundPanel {
                             x2 -= radius;
                         }
                     }
-                    //System.out.println(theta);
+                    TextFieldOnArc textFieldOnArc = arcInfoTemp.getTextFieldOnArc();
+                    textFieldOnArc.setBounds(((x1 + x2) / 2) - textFieldOnArc.getWidth() / 2, ((y1 + y2) / 2) - textFieldOnArc.getHeight() / 2 - 10, 50, 20);
+                    textFieldOnArc.setText(Integer.toString((arcInfoTemp.getmDistance())));
                     graphics.drawLine(x1, y1, x2, y2);
+                    this.add(textFieldOnArc, 0);
                     repaint();
                 }
             }
@@ -180,9 +199,9 @@ public class CityChessPanel extends RoundPanel {
                 btn.setClicked(true);
                 frameMainWindow.cityBtnCurrent = btn;
                 frameMainWindow.textFieldCityName.setText("");
-                frameMainWindow.roundTextArea.textAreaCityInfo.setText("");
+                frameMainWindow.roundTextArea.textAreaReal.setText("");
                 listCityBtn.add(btn);
-                that.add(btn, 0);
+                that.add(btn);
                 that.add(btn.labelCityName);
                 that.repaint();//重新绘制 不然会出现需要鼠标滑过才显示的问题
             }
@@ -191,4 +210,30 @@ public class CityChessPanel extends RoundPanel {
 
     }
 
+    //删除指定id的按钮
+    public void deleteBtn() {
+        CityBtn temp = frameMainWindow.cityBtnCurrent;
+
+        for (ArcInfo arcInfo :
+                temp.listArcInfo) { //从当前按钮的边列表里面找到边信息
+            for (ArcInfo temp2 :
+                    arcInfo.getmTarget().listArcInfo) { //以待删除节点为起点的边，并获取边终点
+                if (temp2.getmTarget() == temp) {
+                    arcInfo.getmTarget().listArcInfo.remove(temp2);//将边终点进行反向删除（即删除以待删除节点为起点的边）
+                    break;
+                }
+            }
+        }
+        listCityBtn.remove(temp); //把边关系清理干净后删除按钮本身
+        this.remove(temp);
+
+        if (listCityBtn.isEmpty()) {
+            frameMainWindow.cityBtnCurrent = null;
+            frameMainWindow.logToWindow("城市已被全部删除");
+        } else {
+            int count = listCityBtn.size();//删除时按添加的先后顺序删除
+            frameMainWindow.cityBtnCurrent = listCityBtn.get(count - 1);
+        }
+        repaint();
+    }
 }

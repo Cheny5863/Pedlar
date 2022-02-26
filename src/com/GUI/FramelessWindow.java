@@ -1,7 +1,4 @@
 package com.GUI;
-import com.GUI.ShadowBorder;
-import com.sun.awt.AWTUtilities;
-import com.sun.xml.internal.messaging.saaj.soap.JpegDataContentHandler;
 
 import java.awt.*;
 import java.awt.event.*;

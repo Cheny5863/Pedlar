@@ -1,5 +1,7 @@
 package com.GUI;
 
+import com.sun.org.apache.xerces.internal.xs.StringList;
+
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JFrame;
@@ -13,6 +15,10 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
 
 public class MainWindow extends FramelessWindow {
     public CityChessPanel paintPad;//画板
@@ -22,6 +28,8 @@ public class MainWindow extends FramelessWindow {
     public BorderTextField textFieldCityName;
     public RoundTextArea roundTextArea;
     public CityBtn cityBtnCurrent = null;
+    public RoundTextArea textAreaLog;
+    private ArrayList<String> listLogInfo = new ArrayList<>();
 
     public MainWindow() {
         super();
@@ -148,7 +156,7 @@ public class MainWindow extends FramelessWindow {
 
                 RoundTextArea textAreaCityInfo = new RoundTextArea(20, 20, 200, 245, true, "请输入城市信息");
                 textAreaCityInfo.setBackground(new Color(157, 189, 183));
-                textAreaCityInfo.textAreaCityInfo.setBackground(new Color(157, 189, 183));
+                textAreaCityInfo.textAreaReal.setBackground(new Color(157, 189, 183));
                 textAreaCityInfo.setPreferredSize(new Dimension(200, 250));
                 Box boxHorizon = Box.createHorizontalBox();
                 boxHorizon.add(Box.createHorizontalStrut(5));
@@ -228,10 +236,10 @@ public class MainWindow extends FramelessWindow {
 
         //设置文本域的参数
         roundTextArea = new RoundTextArea(20, 20, 180, 80, false, null);
-        roundTextArea.textAreaCityInfo.setBackground(new Color(163, 204, 202));
-        roundTextArea.textAreaCityInfo.setForeground(Color.white);
-        //roundTextArea.textAreaCityInfo.setEditable(false);
-        roundTextArea.textAreaCityInfo.setFont(new Font("微软雅黑", Font.BOLD, 12));
+        roundTextArea.textAreaReal.setBackground(new Color(163, 204, 202));
+        roundTextArea.textAreaReal.setForeground(Color.white);
+        //roundTextArea.textAreaReal.setEditable(false);
+        roundTextArea.textAreaReal.setFont(new Font("微软雅黑", Font.BOLD, 12));
         roundTextArea.setAutoscrolls(true);
         roundTextArea.setBackground(new Color(163, 204, 202));
         RoundBtn btnDeleConfirm = new RoundBtn(20, 20, 60, 20);
@@ -245,8 +253,26 @@ public class MainWindow extends FramelessWindow {
         btnRevise.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                cityBtnCurrent.labelCityName.setText(textFieldCityName.getText());
-                cityBtnCurrent.setStrCityInfo(roundTextArea.textAreaCityInfo.getText());
+                if (cityBtnCurrent != null) {
+                    cityBtnCurrent.labelCityName.setText(textFieldCityName.getText());
+                    cityBtnCurrent.setStrCityInfo(roundTextArea.textAreaReal.getText());
+                    logToWindow("修改成功!!!");
+                } else {
+                    logToWindow("当前还没有选中城市");
+                }
+
+            }
+        });
+
+        btnDeleConfirm.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (cityBtnCurrent != null) {
+                    paintPad.deleteBtn();
+                } else {
+                    logToWindow("当前还没有选中城市");
+                }
+
             }
         });
 
@@ -322,20 +348,42 @@ public class MainWindow extends FramelessWindow {
         logTop.setPreferredSize(new Dimension(rightPanel.getWidth(), 50));
         logBottom.setPreferredSize(new Dimension(rightPanel.getWidth(), 760));
 
-        RoundTextArea textAreaLog = new RoundTextArea(20, 20, 170, 570, false, null);
+        textAreaLog = new RoundTextArea(20, 20, 170, 570, false, null);
         textAreaLog.setBackground(new Color(163, 204, 202));
-        textAreaLog.textAreaCityInfo.setBackground(new Color(163, 204, 202));
-        textAreaLog.textAreaCityInfo.setFont(new Font("微软雅黑", Font.BOLD, 16));
-        textAreaLog.textAreaCityInfo.setForeground(Color.white);
+        textAreaLog.textAreaReal.setBackground(new Color(163, 204, 202));
+        textAreaLog.textAreaReal.setFont(new Font("微软雅黑", Font.BOLD, 14));
+        textAreaLog.textAreaReal.setForeground(Color.white);
         logTop.setLayout(new FlowLayout(FlowLayout.LEFT));
         JLabel titleLog = new JLabel("Log");
         titleLog.setFont(new Font("微软雅黑", Font.BOLD, 32));
         titleLog.setForeground(Color.white);
-        textAreaLog.textAreaCityInfo.setEditable(false);
+        textAreaLog.textAreaReal.setEditable(false);
 
         logTop.add(titleLog);
         logBottom.add(textAreaLog);
 
 
+    }
+
+    public void logToWindow(String sth) {
+        if (sth == "")
+            return;
+        Date now = new Date(); // 创建一个Date对象，获取当前时间
+        // 指定格式化格式
+        SimpleDateFormat f = new SimpleDateFormat("HH:mm:ss ");
+        String strTime = f.format(now);
+        listLogInfo.add(strTime + " " + sth);
+
+        if (listLogInfo.size() == 201) {//限制log区的大小
+            listLogInfo.remove(0);
+        }
+
+        StringBuffer buffer = new StringBuffer();
+        for (String str :
+                listLogInfo) {
+            buffer.append(str);
+            buffer.append("\n\n");
+        }
+        textAreaLog.textAreaReal.setText(buffer.toString());
     }
 }

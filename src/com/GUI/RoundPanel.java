@@ -16,7 +16,6 @@ import java.awt.event.MouseEvent;
 import java.awt.geom.RoundRectangle2D;
 
 public class RoundPanel extends JPanel {
-    private static final long serialVersionUID = 1L;
     public Timer timer;
     private int clickTimes = 0;
     int xOld = 0;
@@ -83,7 +82,6 @@ public class RoundPanel extends JPanel {
 
 
     public void doubleClick(){
-        RoundPanel that = this;
 
     }
 
