@@ -1,8 +1,5 @@
 package com.GUI;
 
-import javafx.scene.shape.Arc;
-
-import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.Timer;
 import java.awt.Color;

@@ -20,6 +20,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class CityChessPanel extends RoundPanel {
+
+
+    public void setCityNum(int cityNum) {
+        this.cityNum = cityNum;
+    }
+
     private int cityNum = 0;
     private Point pointStart = new Point();
     private boolean isSettingArc = false;
@@ -31,6 +37,9 @@ public class CityChessPanel extends RoundPanel {
         return isInputing;
     }
 
+    public int getCityNum() {
+        return cityNum;
+    }
 
     public void setInputing(boolean inputing) {
         isInputing = inputing;
@@ -191,8 +200,7 @@ public class CityChessPanel extends RoundPanel {
 
                 /*加按钮*/
                 CityBtn btn = new CityBtn(frameMainWindow, cityNum);
-                btn.setBounds(xOld, yOld, btn.getWidth(), btn.getHeight());//设置按钮位置
-                //btn.setLocation(xOld,yOld); //直接设置位置不生效
+                btn.setLocation(xOld, yOld);
                 btn.labelCityName.setBounds(xOld - 25, yOld + btn.getHeight() / 2 + 5, btn.getWidth() + 50, btn.getHeight() + 10);
 
                 btn.setBackground(Color.orange);

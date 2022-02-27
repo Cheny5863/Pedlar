@@ -253,6 +253,8 @@ public class CityBtn extends JButton {
             if (tempArc.equal(arcInfo)) {//已经添加过这条边，就不加了
                 System.out.println("已经添加过这条边");
                 frameMainWindow.paintPad.setSettingArc(false);
+                frameMainWindow.paintPad.setInputing(true);
+
                 return false;
             }
         }

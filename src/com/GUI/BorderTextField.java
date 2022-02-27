@@ -6,17 +6,21 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Insets;
-import java.awt.Paint;
 import java.awt.RenderingHints;
 import java.awt.Shape;
-import java.awt.Stroke;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
 public class BorderTextField extends JTextField {
-    private static final long serialVersionUID = -1946802815417758252L;
+
+
+    private Color mForeGround = new Color(255, 255, 255);
+
+    public void setmForeGround(Color mForeGround) {
+        this.mForeGround = mForeGround;
+    }
 
     public void setNumOnly(boolean numOnly) {
         isNumOnly = numOnly;
@@ -59,7 +63,7 @@ public class BorderTextField extends JTextField {
             setText(stringPlaceHold);
         BorderTextField that = this;
         this.setBackground(null);
-
+        setHorizontalAlignment(CENTER);
         this.addKeyListener(new KeyAdapter() {
             @Override
             public void keyTyped(KeyEvent e) {
@@ -91,7 +95,7 @@ public class BorderTextField extends JTextField {
                 //得到焦点时，当前文本框的提示文字和创建该对象时的提示文字一样，说明用户正要键入内容
                 if (that.getText().equals(stringPlaceHold)) {
                     that.setText("");     //将提示文字清空
-                    that.setForeground(Color.black);  //设置用户输入的字体颜色为黑色
+                    that.setForeground(mForeGround);  //设置用户输入的字体颜色为黑色
                 }
             }
 

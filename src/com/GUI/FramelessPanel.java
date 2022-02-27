@@ -14,6 +14,12 @@ public class FramelessPanel extends JFrame {
     public boolean isSettingArc = false;
     public CityBtn cityBtnArcEnd = null;
 
+    public void setFrameMainWindow(MainWindow frameMainWindow) {
+        this.frameMainWindow = frameMainWindow;
+    }
+
+    private MainWindow frameMainWindow = null;
+
     public void setMenuBarHeight(int menuBarHeight) {
         this.menuBarHeight = menuBarHeight;
     }

@@ -29,8 +29,9 @@ public class MainWindow extends FramelessWindow {
     public RoundTextArea roundTextArea;
     public CityBtn cityBtnCurrent = null;
     public RoundTextArea textAreaLog;
+    public BorderTextField inputCity;
     private ArrayList<String> listLogInfo = new ArrayList<>();
-
+    public RoundBtn btnInputConfirm;
     public MainWindow() {
         super();
 
@@ -121,88 +122,39 @@ public class MainWindow extends FramelessWindow {
 
         //录入区下半部分的组件
         inputAreaBottom.setLayout(new FlowLayout(FlowLayout.CENTER, 15, 25));
-        BorderTextField inputCity = new BorderTextField(20, true, "请输入录入城市个数");
+        inputCity = new BorderTextField(20, true, "请输入录入城市个数");
         inputCity.setNumOnly(true);
         inputCity.setPreferredSize(new Dimension(200, 30));
         inputCity.setBackground(null);
         inputCity.setForeground(Color.white);
         inputCity.setFrameMainWindow(this);
         inputCity.setMaxInputNum(3);
-        RoundBtn btnInputConfirm = new RoundBtn(20, 20, 60, 30);
+        btnInputConfirm = new RoundBtn(20, 20, 60, 30);
         btnInputConfirm.setBackground(Color.black);
         btnInputConfirm.setText("确认");
         //将录入区的搜索栏和按钮放入容器
         inputAreaBottom.add(inputCity);
         inputAreaBottom.add(btnInputConfirm);
         //录入区确认按钮的点击事件
-
+        MainWindow that = this;
         btnInputConfirm.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //点击后禁用确认按键
-                btnInputConfirm.setEnabled(false);
-                FramelessPanel frameInput = new FramelessPanel(270, 430);
-
-                frameInput.setBounds(getBounds().x + getWidth() / 2 - 135, getBounds().y + getHeight() / 2 - 215, 270, 430);
-                frameInput.getContentPane().setBackground(new Color(175, 217, 209));
-                //frameInput.setBackground(Color.black);
-                frameInput.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 20));
-                JPanel panelBottom;//上盒子放输入框 下盒子放按钮
-                //输入弹窗上盒子
-                RoundPanel panelTop = new RoundPanel(20, 20);
-
-                panelTop.setPreferredSize(new Dimension(230, 300));
-                panelTop.setLayout(new BoxLayout(panelTop, BoxLayout.Y_AXIS));
-                panelTop.setBackground(new Color(163, 204, 202));
-                BorderTextField textCityName = new BorderTextField(20, true, "请输入城市名");
-                textCityName.setPreferredSize(new Dimension(200, 25));
-
-
-                RoundTextArea textAreaCityInfo = new RoundTextArea(20, 20, 200, 245, true, "请输入城市信息");
-                textAreaCityInfo.setBackground(new Color(157, 189, 183));
-                textAreaCityInfo.textAreaReal.setBackground(new Color(157, 189, 183));
-                textAreaCityInfo.setPreferredSize(new Dimension(200, 250));
-                Box boxHorizon = Box.createHorizontalBox();
-                boxHorizon.add(Box.createHorizontalStrut(5));
-                boxHorizon.add(textCityName);
-                boxHorizon.add(Box.createHorizontalStrut(5));
-                boxHorizon.setBackground(new Color(163, 204, 202));
-                JLabel labelTitle = new JLabel("请输入第n个城市", SwingConstants.CENTER);
-                labelTitle.setForeground(Color.white);
-                labelTitle.setFont(new Font("微软雅黑", Font.BOLD, 16));
-
-                panelTop.add(Box.createVerticalStrut(10));
-                panelTop.add(boxHorizon);
-                panelTop.add(Box.createVerticalStrut(10));
-                panelTop.add(textAreaCityInfo);
-
-
-                //输入弹窗下盒子
-                panelBottom = new JPanel();
-                panelBottom.setLayout(new BoxLayout(panelBottom, BoxLayout.X_AXIS));
-                panelBottom.setBackground(null);
-                RoundBtn btnCancel = new RoundBtn(10, 10, 60, 40);
-                RoundBtn btnConfirm = new RoundBtn(10, 10, 60, 40);
-                btnCancel.setText("取消");
-                btnConfirm.setText("确认");
-                panelBottom.add(btnCancel);
-                panelBottom.add(Box.createHorizontalStrut(40));
-                panelBottom.add(btnConfirm);
-
-
-                btnCancel.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        btnInputConfirm.setEnabled(true);
-                        btnInputConfirm.setBackground(Color.black);
-                        frameInput.dispose();
+                if (!inputCity.getText().equals(new String("请输入录入城市个数"))) {
+                    //点击后禁用确认按键
+                    btnInputConfirm.setEnabled(false);
+                    //创建一个弹出窗口
+                    PopupInputer frameInput = new PopupInputer(270, 430, that);
+                    int inputMount = Integer.parseInt(inputCity.getText());
+                    frameInput.setInputMount(inputMount);
+                    if (inputMount > 1) {
+                        frameInput.btnConfirm.setText("下一个");
                     }
-                });
+                    frameInput.labelTitle.setText("请输入第1个城市信息");
+                } else {
+                    logToWindow("请先输入待录入城市个数");
+                }
 
-                frameInput.add(labelTitle);
-                frameInput.add(panelTop);
-                frameInput.add(panelBottom);
-                frameInput.setVisible(true);
             }
         });
 
