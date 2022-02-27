@@ -25,7 +25,7 @@ public class CityChessPanel extends RoundPanel {
     public void setCityNum(int cityNum) {
         this.cityNum = cityNum;
     }
-
+    private ArrayList<Path> allPath = new ArrayList<>();
     private int cityNum = 0;
     private Point pointStart = new Point();
     private boolean isSettingArc = false;
@@ -211,6 +211,10 @@ public class CityChessPanel extends RoundPanel {
                 listCityBtn.add(btn);
                 that.add(btn);
                 that.add(btn.labelCityName);
+
+                //添加城市后更新下拉框的候选项
+                frameMainWindow.updateComboBox();
+
                 that.repaint();//重新绘制 不然会出现需要鼠标滑过才显示的问题
             }
         });
@@ -241,8 +245,9 @@ public class CityChessPanel extends RoundPanel {
         }
 
         this.remove(temp); //从显示面板上去掉它
+        this.remove(temp.labelCityName);
         listCityBtn.remove(temp); //删除按钮对象
-
+        frameMainWindow.updateComboBox();//删除按钮后需要更新下拉框
 
         if (listCityBtn.isEmpty()) {
             frameMainWindow.cityBtnCurrent = null;
@@ -250,6 +255,8 @@ public class CityChessPanel extends RoundPanel {
         } else {
             int count = listCityBtn.size();//删除时按添加的先后顺序删除
             frameMainWindow.cityBtnCurrent = listCityBtn.get(count - 1);
+            frameMainWindow.textFieldCityName.setText(frameMainWindow.cityBtnCurrent.labelCityName.getText());
+            frameMainWindow.roundTextArea.textAreaReal.setText(frameMainWindow.cityBtnCurrent.getStrCityInfo());
         }
         repaint();
     }

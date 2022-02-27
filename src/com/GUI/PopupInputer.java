@@ -118,7 +118,7 @@ public class PopupInputer extends FramelessPanel {
                     labelTitle.setText(String.format("请输入第%d个城市的信息", inputCount + 1));
                     textCityName.setText("");
                     textAreaCityInfo.textAreaReal.setText("");
-
+                    textCityName.requestFocus();
                     if (inputCount == inputMount - 1)
                         btnConfirm.setText("完成");
 
@@ -154,6 +154,7 @@ public class PopupInputer extends FramelessPanel {
 
         frameMainWindow.inputCity.setText("请输入录入城市个数");
         frameMainWindow.btnInputConfirm.setEnabled(true);
+        frameMainWindow.updateComboBox();
         this.dispose();
     }
 }

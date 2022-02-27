@@ -4,7 +4,6 @@ import com.sun.org.apache.xerces.internal.xs.StringList;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
-import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -214,6 +213,8 @@ public class MainWindow extends FramelessWindow {
                 if (cityBtnCurrent != null) {
                     cityBtnCurrent.labelCityName.setText(textFieldCityName.getText());
                     cityBtnCurrent.setStrCityInfo(roundTextArea.textAreaReal.getText());
+                    updateComboBox();//修改按钮后需要更新下拉框
+
                     logToWindow("修改成功!!!");
                 } else {
                     logToWindow("当前还没有选中城市");
@@ -226,6 +227,8 @@ public class MainWindow extends FramelessWindow {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (cityBtnCurrent != null) {
+                    textFieldCityName.setText("");
+                    roundTextArea.textAreaReal.setText("");
                     paintPad.deleteBtn();
                 } else {
                     logToWindow("当前还没有选中城市");
@@ -260,9 +263,8 @@ public class MainWindow extends FramelessWindow {
         //设置标题和文字大小
         departTop.setLayout(new FlowLayout(FlowLayout.LEFT, 20, 10));
         comboBoxBtnSelector = new RoundComboBox();
-        comboBoxBtnSelector.addItem("测试1");
-        comboBoxBtnSelector.addItem("测试2");
         comboBoxBtnSelector.setPreferredSize(new Dimension(100, 20));
+
         JLabel titleDepart = new JLabel("前往: ");
         titleDepart.setFont(new Font("微软雅黑", Font.BOLD, 15));
         titleDepart.setForeground(Color.white);
@@ -277,6 +279,22 @@ public class MainWindow extends FramelessWindow {
         departBottom.add(btnDepart);
         departureArea.add(departTop);
         departureArea.add(departBottom);
+        btnDepart.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                CityBtn cityBtnDestination = (CityBtn) (comboBoxBtnSelector.getSelectedItem());
+                if (cityBtnDestination == null) {
+                    logToWindow("请先选择目的地");
+                    return;
+                } else {
+                    //深度优先遍历 遍历结束后判断终点是否为目的地 如果是将此路径保留 回溯到上一顶点
+
+
+                }
+
+
+            }
+        });
 
 
         //将三个功能区加入控制台
@@ -349,5 +367,13 @@ public class MainWindow extends FramelessWindow {
             buffer.append("\n\n");
         }
         textAreaLog.textAreaReal.setText(buffer.toString());
+    }
+
+    public void updateComboBox() {
+        comboBoxBtnSelector.removeAllItems();
+        for (CityBtn temp :
+                paintPad.listCityBtn) {
+            comboBoxBtnSelector.addItem(temp);
+        }
     }
 }

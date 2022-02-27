@@ -261,4 +261,8 @@ public class CityBtn extends JButton {
         this.listArcInfo.add(arcInfo);
         return true;
     }
+
+    public String toString() {
+        return this.labelCityName.getText();
+    }
 }
