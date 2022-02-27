@@ -4,6 +4,7 @@ import com.sun.org.apache.xerces.internal.xs.StringList;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -17,7 +18,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 
 public class MainWindow extends FramelessWindow {
@@ -32,6 +32,8 @@ public class MainWindow extends FramelessWindow {
     public BorderTextField inputCity;
     private ArrayList<String> listLogInfo = new ArrayList<>();
     public RoundBtn btnInputConfirm;
+    public RoundComboBox comboBoxBtnSelector;
+
     public MainWindow() {
         super();
 
@@ -247,22 +249,28 @@ public class MainWindow extends FramelessWindow {
         departTop = new JPanel();
         departBottom = new JPanel();
         controller.add(departTop);
+        controller.add(Box.createVerticalStrut(50));
         controller.add(departBottom);
         //设置上下两部分的属性
         departTop.setBackground(null);
         departBottom.setBackground(null);
-        departBottom.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
-        departTop.setPreferredSize(new Dimension(controller.getWidth(), 20));
-        departBottom.setPreferredSize(new Dimension(controller.getWidth(), 400));
+        departBottom.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 0));
+        departTop.setPreferredSize(new Dimension(controller.getWidth(), 200));
+        departBottom.setPreferredSize(new Dimension(controller.getWidth(), 100));
         //设置标题和文字大小
-        departTop.setLayout(new FlowLayout(FlowLayout.LEFT, 15, 10));
-        JLabel titleDepart = new JLabel("出发:");
+        departTop.setLayout(new FlowLayout(FlowLayout.LEFT, 20, 10));
+        comboBoxBtnSelector = new RoundComboBox();
+        comboBoxBtnSelector.addItem("测试1");
+        comboBoxBtnSelector.addItem("测试2");
+        comboBoxBtnSelector.setPreferredSize(new Dimension(100, 20));
+        JLabel titleDepart = new JLabel("前往: ");
         titleDepart.setFont(new Font("微软雅黑", Font.BOLD, 15));
         titleDepart.setForeground(Color.white);
         //将标题添加至panel
         departTop.add(titleDepart);
+        departTop.add(comboBoxBtnSelector);
         //将按钮添加至panel
-        RoundBtn btnDepart = new RoundBtn(15, 15, 100, 60);
+        RoundBtn btnDepart = new RoundBtn(15, 15, 100, 50);
         btnDepart.setBackground(new Color(103, 223, 136));
         btnDepart.setText("Go");
         btnDepart.setFont(new Font("微软雅黑", Font.BOLD, 36));

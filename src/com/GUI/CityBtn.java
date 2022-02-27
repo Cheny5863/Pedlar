@@ -35,7 +35,7 @@ public class CityBtn extends JButton {
     private int startY = 0;
     private int lastX = 0;
     private int lastY = 0;
-
+    private int status = 0;//当前城市状态 0 未走过 1 已走过 2 走过路径无法最短 0千
 
     private int id = 0;
     private String strCityInfo = new String();

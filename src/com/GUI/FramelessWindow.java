@@ -8,7 +8,6 @@ import javax.swing.*;
 public class FramelessWindow extends JFrame {
 
     //背景图片bgImage
-    //private ImageIcon bgImage = new ImageIcon("images/bg.png");
     //用于处理拖动事件，表示鼠标按下时的坐标，相对于JFrame
     private ImageIcon miniBtnIcon = new ImageIcon("images/max.png");
     private ImageIcon closeBtnIcon = new ImageIcon("images/close.png");
