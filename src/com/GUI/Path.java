@@ -64,4 +64,13 @@ public class Path {
         pathCopy.distance = this.getDistance();
         return pathCopy;
     }
+
+    public boolean isInPath(CityBtn target){
+        for (int i = 0; i < this.listAllPoint.size();i++){
+            if (target.equals(this.listAllPoint.get(i).getTarget())){
+                return true;
+            }
+        }
+        return false;
+    }
 }

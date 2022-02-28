@@ -80,14 +80,24 @@ public class ArcInfo {
         return false;
     }
 
-    public static CityBtnAccessible getAblePass(ArrayList<ArcInfo> listArc){
+    public static CityBtnAccessible getAblePass( CityBtn start,Path pathTemp,boolean isOrigin){ //帮临时起点 找可以通过的边
         CityBtnAccessible temp = null;
+
         for (ArcInfo arcTemp :
-                listArc) {
-            if(!arcTemp.getmTarget().isPassed()){
-                temp =new CityBtnAccessible(arcTemp.getmTarget(),arcTemp.getmDistance());
-                break;
+                start.listArcInfo) {
+            if (isOrigin){
+                if((arcTemp.getmTarget().getStatus() == 0)){ //如果是起点那么只能取0
+                    temp =new CityBtnAccessible(arcTemp.getmTarget(),arcTemp.getmDistance());
+                    break;
+                }
+            }else{
+
+                if((arcTemp.getmTarget().getStatus() == 0) || ((arcTemp.getmTarget().getStatus() ==2) && (!pathTemp.isInPath(arcTemp.getmTarget())))){ //如果不是起点 那么取0 或 2且不在栈内都可以
+                    temp =new CityBtnAccessible(arcTemp.getmTarget(),arcTemp.getmDistance());
+                    break;
+                }
             }
+
         }
         return temp;
     }

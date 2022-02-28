@@ -35,10 +35,7 @@ public class CityBtn extends JButton {
     private int startY = 0;
     private int lastX = 0;
     private int lastY = 0;
-
-
-
-    private boolean isPassed = false;//当前城市状态 0 未走过 1 已走过 2 已经走过并找到所有路径
+    private int status = 0;//当前城市状态 0 未走过 1 已走过 2 已经走过并找到所有路径
     private int id = 0;
     private String strCityInfo = new String();
     public ArrayList<ArcInfo> listArcInfo = new ArrayList<>();
@@ -47,13 +44,15 @@ public class CityBtn extends JButton {
     public ArrayList<CityBtn> listUnVisted = new ArrayList<>();
     private boolean isClicked = false;
 
-    public boolean isPassed() {
-        return isPassed;
+
+    public int getStatus() {
+        return status;
     }
 
-    public void setPassed(boolean passed) {
-        isPassed = passed;
+    public void setStatus(int status) {
+        this.status = status;
     }
+
     public String getStrCityInfo() {
         return strCityInfo;
     }
@@ -278,4 +277,13 @@ public class CityBtn extends JButton {
         return this.labelCityName.getText();
     }
 
+
+    public boolean isNearOrigin(CityBtn another){
+        for (ArcInfo cityBtnTemp : another.listArcInfo){
+            if (cityBtnTemp.getmStart().equals(this)){
+                return true;
+            }
+        }
+        return false;
+    }
 }
