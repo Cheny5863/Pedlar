@@ -293,104 +293,15 @@ public class MainWindow extends FramelessWindow {
                 } else if (cityBtnDestination == cityBtnCurrent){
                     logToWindow("起点不能和终点相同!!!");
                 }else{
-                    ArrayList<Path> listAllPath = new ArrayList<>();//保存可能符合条件的路径
-                    //深度优先遍历 遍历结束后判断终点是否为目的地 如果是将此路径保留 回溯到上一顶点
-                    Path pathTemp = new Path();
-                    pathTemp.listAllPoint.push(new CityBtnAccessible(cityBtnCurrent,0));
-                    CityBtn cityBtnCurLoop;
-                    CityBtnAccessible cityBtnAblePass;
-                    ArrayList<CityBtn> listCityBtnPatch = new ArrayList<>();
+                    PathResolver pathResolver = new PathResolver();
+                    pathResolver.collectAllPath(new CityBtnAccessible(cityBtnCurrent,0),cityBtnDestination);
 
-                    while(!pathTemp.listAllPoint.isEmpty()){//如果栈不为空
-                        cityBtnCurLoop = pathTemp.listAllPoint.peek().getTarget();
-                        if (isOrigin(cityBtnCurLoop)){ //如果是起点的话需要把所有已经走过的 与自身相连的节点置为2
-                            for (CityBtn cityBtnTemp :
-                                    listCityBtnPatch) {
-                                cityBtnTemp.setStatus(2);
-                            }
-                        }
-
-                        if (pathTemp.listAllPoint.size() == 2){
-                            cityBtnCurLoop.setStatus(2);
-                            boolean isAddin = true;
-                            for (CityBtn cityBtnTemp:listCityBtnPatch){ //从起点出发到的第一个  加入特殊列表
-                                if (cityBtnTemp.equals(cityBtnCurLoop)){
-                                    isAddin = false;
-                                }
-                            }
-                            if (isAddin){
-                                listCityBtnPatch.add(cityBtnCurLoop);
-                            }
-                        } else
-                            cityBtnCurLoop.setStatus(1); //普通点走过了的标识
-
-                        for (CityBtn cityBtnUnVisted : //释放所有当前节点没走过的点
-                                cityBtnCurLoop.listUnVisted) {
-                            cityBtnUnVisted.setStatus(0);
-                        }
-
-                        //System.out.println("cityBtnCur: "+cityBtnCurrent +" cityBtnDes: " +cityBtnDestination);
-                        if (cityBtnCurLoop.equals(cityBtnDestination)){//如果到达终点了
-                            if (pathTemp.listAllPoint.size() == paintPad.listCityBtn.size())
-                                listAllPath.add(pathTemp.clone());
-                            logToWindow(pathTemp.toString());
-                            //将终点从路径弹出时 路径长度更新
-                            pathTemp.setDistance(pathTemp.getDistance() - pathTemp.listAllPoint.pop().getCost());
-                        }else{
-                            //如果有邻居没走过
-                            cityBtnAblePass = ArcInfo.getAblePass(cityBtnCurLoop,pathTemp,isOrigin(cityBtnCurLoop));
-
-                            if(cityBtnAblePass != null){
-
-                                if (!cityBtnAblePass.getTarget().equals(cityBtnDestination)){
-                                    cityBtnDestination.setStatus(0);
-                                }
-
-                                pathTemp.setDistance(pathTemp.getDistance()+cityBtnAblePass.getCost());
-                                pathTemp.listAllPoint.push(cityBtnAblePass);//将可以进入的节点压入栈中
-                                //cityBtnCurLoop.listUnVisted.clear();//更新当前节点未访问的节点
-//                                for (ArcInfo cityBtnTemp :
-//                                        cityBtnCurLoop.listArcInfo) {
-//                                    CityBtn cityBtnUnVisted = cityBtnTemp.getmTarget();
-//                                    //将没有走过的放入listUnVisted中
-//                                    if (((!cityBtnUnVisted.equals(cityBtnAblePass.getTarget()))&&(cityBtnUnVisted.getStatus() = 1))){
-//                                        cityBtnCurLoop.listUnVisted.add(cityBtnUnVisted);
-//                                    }
-//                                }
-
-                                cityBtnCurLoop.listUnVisted.clear();//更新当前节点未访问的节点
-                                for (ArcInfo cityBtnTemp :
-                                        cityBtnCurLoop.listArcInfo) { //对cityBtnCurloop 的边进行遍历
-                                    CityBtn cityBtnUnVisted = cityBtnTemp.getmTarget();
-                                    if(!pathTemp.isInPath(cityBtnTemp.getmTarget())){ //如果边的末端不在当前路径内
-                                        if (cityBtnTemp.getmTarget().getStatus() == 0){ //并且还没走过
-                                            cityBtnCurLoop.listUnVisted.add(cityBtnUnVisted);
-                                        }
-                                    };
-                                }
-
-                            }else{ //如果邻居都被走过了，弹出栈顶 并且路径长度也要更新
-                                CityBtnAccessible cityBtnPassed = pathTemp.listAllPoint.pop();
-                                pathTemp.setDistance(pathTemp.getDistance() - cityBtnPassed.getCost());
-
-
-                            };
-                        }
+                    for (Path pathTemp :
+                            pathResolver.listAllPath) {
+                        logToWindow(pathTemp.toString());
                     }
-
-
-                    System.out.println("listAllPath Size: "+listAllPath.size());
-                    if (listAllPath.size() == 0)
+                    if (pathResolver.listAllPath.size() == 0)
                         logToWindow("对不起没找到符合条件的路径，该图不存在满足给定起点与终点的哈密尔顿通路");
-                    for (Path pathShowLog :
-                            listAllPath) {
-                       logToWindow(pathShowLog.toString());
-                    }
-
-                    for (CityBtn cityBtnRestore:paintPad.listCityBtn){//出去前重置按钮状态
-                        cityBtnRestore.setStatus(0);
-                        cityBtnRestore.listUnVisted.clear();
-                    }
                 }
 
 
@@ -481,4 +392,5 @@ public class MainWindow extends FramelessWindow {
     public boolean isOrigin(CityBtn another){ //返回传入的城市是否是起点
         return cityBtnCurrent.equals(another);
     }
+
 }
