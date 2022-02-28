@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="BranchesTreeState">
+    <expand>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </expand>
+    <select />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="f6e1bcdd-1522-439d-aa99-387d2708f507" name="Default Changelist" comment="实现了基本的寻路，更进一步，少数路径没办法找出，存下档">
+      <change beforePath="$PROJECT_DIR$/src/com/GUI/MainWindow.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/GUI/MainWindow.java" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectId" id="25inNFYb0aB2xhDXyYlzxLQ4MLa" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="aspect.path.notification.shown" value="true" />
+    <property name="project.structure.last.edited" value="Project" />
+    <property name="project.structure.proportion" value="0.15" />
+    <property name="project.structure.side.proportion" value="0.0" />
+  </component>
+  <component name="RunManager">
+    <configuration name="Main" type="Application" factoryName="Application" nameIsGenerated="true">
+      <option name="ALTERNATIVE_JRE_PATH" value="1.8" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
+      <option name="MAIN_CLASS_NAME" value="com.cheny.Main" />
+      <module name="Pedlar" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="f6e1bcdd-1522-439d-aa99-387d2708f507" name="Default Changelist" comment="" />
+      <created>1646018732561</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1646018732561</updated>
+      <workItem from="1646018737528" duration="22409000" />
+      <workItem from="1646044391284" duration="8641000" />
+    </task>
+    <task id="LOCAL-00001" summary="实现了基本的寻路，但是有一点点bug，暂时存档">
+      <created>1646030886841</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1646030886841</updated>
+    </task>
+    <task id="LOCAL-00002" summary="实现了基本的寻路，更进一步，少数路径没办法找出，存下档">
+      <created>1646058511141</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1646058511141</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="2" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="实现了基本的寻路，但是有一点点bug，暂时存档" />
+    <MESSAGE value="实现了基本的寻路，更进一步，少数路径没办法找出，存下档" />
+    <option name="LAST_COMMIT_MESSAGE" value="实现了基本的寻路，更进一步，少数路径没办法找出，存下档" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="223" y="72" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1646019046187">
+      <screen x="0" y="0" width="1536" height="834" />
+    </state>
+    <state x="223" y="72" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1536.834@0.0.1536.834" timestamp="1646019046187" />
+    <state x="574" y="101" key="#com.intellij.ide.util.MemberChooser" timestamp="1646030920273">
+      <screen x="0" y="0" width="1536" height="834" />
+    </state>
+    <state x="574" y="101" key="#com.intellij.ide.util.MemberChooser/0.0.1536.834@0.0.1536.834" timestamp="1646030920273" />
+    <state x="498" y="206" key="#com.intellij.ide.util.TreeClassChooserDialog" timestamp="1646018811948">
+      <screen x="0" y="0" width="1536" height="834" />
+    </state>
+    <state x="498" y="206" key="#com.intellij.ide.util.TreeClassChooserDialog/0.0.1536.834@0.0.1536.834" timestamp="1646018811948" />
+    <state x="499" y="164" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1646028674207">
+      <screen x="0" y="0" width="1536" height="834" />
+    </state>
+    <state x="499" y="164" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1536.834@0.0.1536.834" timestamp="1646028674207" />
+    <state width="475" height="438" key="DebuggerActiveHint" timestamp="1646046234741">
+      <screen x="0" y="0" width="1536" height="834" />
+    </state>
+    <state width="475" height="438" key="DebuggerActiveHint/0.0.1536.834@0.0.1536.834" timestamp="1646046234741" />
+    <state width="1015" height="386" key="GridCell.Tab.0.bottom" timestamp="1646058403964">
+      <screen x="0" y="0" width="1536" height="834" />
+    </state>
+    <state width="1015" height="386" key="GridCell.Tab.0.bottom/0.0.1536.834@0.0.1536.834" timestamp="1646058403964" />
+    <state width="1015" height="386" key="GridCell.Tab.0.center" timestamp="1646058403963">
+      <screen x="0" y="0" width="1536" height="834" />
+    </state>
+    <state width="1015" height="386" key="GridCell.Tab.0.center/0.0.1536.834@0.0.1536.834" timestamp="1646058403963" />
+    <state width="1015" height="386" key="GridCell.Tab.0.left" timestamp="1646058403963">
+      <screen x="0" y="0" width="1536" height="834" />
+    </state>
+    <state width="1015" height="386" key="GridCell.Tab.0.left/0.0.1536.834@0.0.1536.834" timestamp="1646058403963" />
+    <state width="1015" height="386" key="GridCell.Tab.0.right" timestamp="1646058403964">
+      <screen x="0" y="0" width="1536" height="834" />
+    </state>
+    <state width="1015" height="386" key="GridCell.Tab.0.right/0.0.1536.834@0.0.1536.834" timestamp="1646058403964" />
+    <state width="1015" height="386" key="GridCell.Tab.1.bottom" timestamp="1646058404613">
+      <screen x="0" y="0" width="1536" height="834" />
+    </state>
+    <state width="1015" height="386" key="GridCell.Tab.1.bottom/0.0.1536.834@0.0.1536.834" timestamp="1646058404613" />
+    <state width="1015" height="386" key="GridCell.Tab.1.center" timestamp="1646058404612">
+      <screen x="0" y="0" width="1536" height="834" />
+    </state>
+    <state width="1015" height="386" key="GridCell.Tab.1.center/0.0.1536.834@0.0.1536.834" timestamp="1646058404612" />
+    <state width="1015" height="386" key="GridCell.Tab.1.left" timestamp="1646058404612">
+      <screen x="0" y="0" width="1536" height="834" />
+    </state>
+    <state width="1015" height="386" key="GridCell.Tab.1.left/0.0.1536.834@0.0.1536.834" timestamp="1646058404612" />
+    <state width="1015" height="386" key="GridCell.Tab.1.right" timestamp="1646058404612">
+      <screen x="0" y="0" width="1536" height="834" />
+    </state>
+    <state width="1015" height="386" key="GridCell.Tab.1.right/0.0.1536.834@0.0.1536.834" timestamp="1646058404612" />
+    <state x="249" y="0" key="SettingsEditor" timestamp="1646019008657">
+      <screen x="0" y="0" width="1536" height="834" />
+    </state>
+    <state x="249" y="0" key="SettingsEditor/0.0.1536.834@0.0.1536.834" timestamp="1646019008657" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/com/GUI/MainWindow.java</url>
+          <line>305</line>
+          <option name="timeStamp" value="3" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+    <watches-manager>
+      <configuration name="Application">
+        <watch expression="cityBtnDestination" />
+        <watch expression="cityBtnCurLoop.listUnVisted" language="JAVA" />
+        <watch expression="cityBtnAblePass" language="JAVA" />
+        <watch expression="cityBtnCurrent" />
+        <watch expression="cityBtnCurLoop" language="JAVA" />
+        <watch expression="cityBtnCurLoop" language="JAVA" />
+        <watch expression="pathTemp" language="JAVA" />
+        <watch expression="listCityBtnPatch" language="JAVA" />
+        <watch expression="cityBtnUnVisted" />
+      </configuration>
+    </watches-manager>
+  </component>
+</project>
