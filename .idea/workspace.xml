@@ -20,12 +20,23 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f6e1bcdd-1522-439d-aa99-387d2708f507" name="Default Changelist" comment="实现了基本的寻路，更进一步，少数路径没办法找出，存下档">
+      <change afterPath="$PROJECT_DIR$/src/com/GUI/PathResolver.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/GUI/ArcInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/GUI/ArcInfo.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/com/GUI/MainWindow.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/GUI/MainWindow.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/GUI/Path.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/GUI/Path.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -66,7 +77,7 @@
       <option name="presentableId" value="Default" />
       <updated>1646018732561</updated>
       <workItem from="1646018737528" duration="22409000" />
-      <workItem from="1646044391284" duration="8641000" />
+      <workItem from="1646044391284" duration="17126000" />
     </task>
     <task id="LOCAL-00001" summary="实现了基本的寻路，但是有一点点bug，暂时存档">
       <created>1646030886841</created>
@@ -82,7 +93,14 @@
       <option name="project" value="LOCAL" />
       <updated>1646058511141</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="实现了基本的寻路，更进一步，少数路径没办法找出，存下档">
+      <created>1646060307998</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1646060307998</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -110,10 +128,10 @@
       <screen x="0" y="0" width="1536" height="834" />
     </state>
     <state x="223" y="72" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1536.834@0.0.1536.834" timestamp="1646019046187" />
-    <state x="574" y="101" key="#com.intellij.ide.util.MemberChooser" timestamp="1646030920273">
+    <state x="884" y="113" key="#com.intellij.ide.util.MemberChooser" timestamp="1646067749236">
       <screen x="0" y="0" width="1536" height="834" />
     </state>
-    <state x="574" y="101" key="#com.intellij.ide.util.MemberChooser/0.0.1536.834@0.0.1536.834" timestamp="1646030920273" />
+    <state x="884" y="113" key="#com.intellij.ide.util.MemberChooser/0.0.1536.834@0.0.1536.834" timestamp="1646067749236" />
     <state x="498" y="206" key="#com.intellij.ide.util.TreeClassChooserDialog" timestamp="1646018811948">
       <screen x="0" y="0" width="1536" height="834" />
     </state>
@@ -126,53 +144,44 @@
       <screen x="0" y="0" width="1536" height="834" />
     </state>
     <state width="475" height="438" key="DebuggerActiveHint/0.0.1536.834@0.0.1536.834" timestamp="1646046234741" />
-    <state width="1015" height="386" key="GridCell.Tab.0.bottom" timestamp="1646058403964">
+    <state width="1493" height="184" key="GridCell.Tab.0.bottom" timestamp="1646069641013">
       <screen x="0" y="0" width="1536" height="834" />
     </state>
-    <state width="1015" height="386" key="GridCell.Tab.0.bottom/0.0.1536.834@0.0.1536.834" timestamp="1646058403964" />
-    <state width="1015" height="386" key="GridCell.Tab.0.center" timestamp="1646058403963">
+    <state width="1493" height="184" key="GridCell.Tab.0.bottom/0.0.1536.834@0.0.1536.834" timestamp="1646069641013" />
+    <state width="1493" height="184" key="GridCell.Tab.0.center" timestamp="1646069641013">
       <screen x="0" y="0" width="1536" height="834" />
     </state>
-    <state width="1015" height="386" key="GridCell.Tab.0.center/0.0.1536.834@0.0.1536.834" timestamp="1646058403963" />
-    <state width="1015" height="386" key="GridCell.Tab.0.left" timestamp="1646058403963">
+    <state width="1493" height="184" key="GridCell.Tab.0.center/0.0.1536.834@0.0.1536.834" timestamp="1646069641013" />
+    <state width="1493" height="184" key="GridCell.Tab.0.left" timestamp="1646069641013">
       <screen x="0" y="0" width="1536" height="834" />
     </state>
-    <state width="1015" height="386" key="GridCell.Tab.0.left/0.0.1536.834@0.0.1536.834" timestamp="1646058403963" />
-    <state width="1015" height="386" key="GridCell.Tab.0.right" timestamp="1646058403964">
+    <state width="1493" height="184" key="GridCell.Tab.0.left/0.0.1536.834@0.0.1536.834" timestamp="1646069641013" />
+    <state width="1493" height="184" key="GridCell.Tab.0.right" timestamp="1646069641013">
       <screen x="0" y="0" width="1536" height="834" />
     </state>
-    <state width="1015" height="386" key="GridCell.Tab.0.right/0.0.1536.834@0.0.1536.834" timestamp="1646058403964" />
-    <state width="1015" height="386" key="GridCell.Tab.1.bottom" timestamp="1646058404613">
+    <state width="1493" height="184" key="GridCell.Tab.0.right/0.0.1536.834@0.0.1536.834" timestamp="1646069641013" />
+    <state width="1493" height="184" key="GridCell.Tab.1.bottom" timestamp="1646069641014">
       <screen x="0" y="0" width="1536" height="834" />
     </state>
-    <state width="1015" height="386" key="GridCell.Tab.1.bottom/0.0.1536.834@0.0.1536.834" timestamp="1646058404613" />
-    <state width="1015" height="386" key="GridCell.Tab.1.center" timestamp="1646058404612">
+    <state width="1493" height="184" key="GridCell.Tab.1.bottom/0.0.1536.834@0.0.1536.834" timestamp="1646069641014" />
+    <state width="1493" height="184" key="GridCell.Tab.1.center" timestamp="1646069641013">
       <screen x="0" y="0" width="1536" height="834" />
     </state>
-    <state width="1015" height="386" key="GridCell.Tab.1.center/0.0.1536.834@0.0.1536.834" timestamp="1646058404612" />
-    <state width="1015" height="386" key="GridCell.Tab.1.left" timestamp="1646058404612">
+    <state width="1493" height="184" key="GridCell.Tab.1.center/0.0.1536.834@0.0.1536.834" timestamp="1646069641013" />
+    <state width="1493" height="184" key="GridCell.Tab.1.left" timestamp="1646069641013">
       <screen x="0" y="0" width="1536" height="834" />
     </state>
-    <state width="1015" height="386" key="GridCell.Tab.1.left/0.0.1536.834@0.0.1536.834" timestamp="1646058404612" />
-    <state width="1015" height="386" key="GridCell.Tab.1.right" timestamp="1646058404612">
+    <state width="1493" height="184" key="GridCell.Tab.1.left/0.0.1536.834@0.0.1536.834" timestamp="1646069641013" />
+    <state width="1493" height="184" key="GridCell.Tab.1.right" timestamp="1646069641014">
       <screen x="0" y="0" width="1536" height="834" />
     </state>
-    <state width="1015" height="386" key="GridCell.Tab.1.right/0.0.1536.834@0.0.1536.834" timestamp="1646058404612" />
+    <state width="1493" height="184" key="GridCell.Tab.1.right/0.0.1536.834@0.0.1536.834" timestamp="1646069641014" />
     <state x="249" y="0" key="SettingsEditor" timestamp="1646019008657">
       <screen x="0" y="0" width="1536" height="834" />
     </state>
     <state x="249" y="0" key="SettingsEditor/0.0.1536.834@0.0.1536.834" timestamp="1646019008657" />
   </component>
   <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/com/GUI/MainWindow.java</url>
-          <line>305</line>
-          <option name="timeStamp" value="3" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
     <watches-manager>
       <configuration name="Application">
         <watch expression="cityBtnDestination" />
@@ -184,6 +193,9 @@
         <watch expression="pathTemp" language="JAVA" />
         <watch expression="listCityBtnPatch" language="JAVA" />
         <watch expression="cityBtnUnVisted" />
+        <watch expression="pathTemp" language="JAVA" />
+        <watch expression="pathTemp" language="JAVA" />
+        <watch expression="pathTemp" language="JAVA" />
       </configuration>
     </watches-manager>
   </component>

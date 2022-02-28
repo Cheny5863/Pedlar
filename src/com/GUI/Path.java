@@ -7,7 +7,6 @@ public class Path {
 
     public Stack<CityBtnAccessible> listAllPoint = new Stack<>();//保存一条路线 途径城市
     private int distance = 0;
-
     public int getDistance() {
         return distance;
     }
@@ -65,12 +64,14 @@ public class Path {
         return pathCopy;
     }
 
-    public boolean isInPath(CityBtn target){
-        for (int i = 0; i < this.listAllPoint.size();i++){
-            if (target.equals(this.listAllPoint.get(i).getTarget())){
+    public static boolean isInPath(CityBtn target,Path pathTemp){
+        for (int i = 0; i < pathTemp.listAllPoint.size();i++){
+            if (target.equals(pathTemp.listAllPoint.get(i).getTarget())){
                 return true;
             }
         }
         return false;
     }
+
+
 }
