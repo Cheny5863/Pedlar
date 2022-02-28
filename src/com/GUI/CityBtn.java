@@ -35,14 +35,25 @@ public class CityBtn extends JButton {
     private int startY = 0;
     private int lastX = 0;
     private int lastY = 0;
-    private int status = 0;//当前城市状态 0 未走过 1 已走过 2 走过路径无法最短 0千
 
+
+
+    private boolean isPassed = false;//当前城市状态 0 未走过 1 已走过 2 已经走过并找到所有路径
     private int id = 0;
     private String strCityInfo = new String();
     public ArrayList<ArcInfo> listArcInfo = new ArrayList<>();
     public MainWindow frameMainWindow;
     public JLabel labelCityName;
+    public ArrayList<CityBtn> listUnVisted = new ArrayList<>();
+    private boolean isClicked = false;
 
+    public boolean isPassed() {
+        return isPassed;
+    }
+
+    public void setPassed(boolean passed) {
+        isPassed = passed;
+    }
     public String getStrCityInfo() {
         return strCityInfo;
     }
@@ -63,7 +74,7 @@ public class CityBtn extends JButton {
         isClicked = clicked;
     }
 
-    private boolean isClicked = false;
+
 
 
     ActionListener taskPerformer = new ActionListener() {
@@ -109,6 +120,7 @@ public class CityBtn extends JButton {
                     if (!timer.isRunning()) ;//如果定时器未启动就启动
                     timer.start();
                     if (frameMainWindow.paintPad.isSettingArc()) {//在设置边的情况下按钮被点击了说明被点击的这个按钮是终点
+                        clickTimes = 0;
                         if (that.id == frameMainWindow.cityBtnCurrent.id) {
                             frameMainWindow.logToWindow("不能设置自己到自己");
                             frameMainWindow.paintPad.setSettingArc(false);
@@ -265,4 +277,5 @@ public class CityBtn extends JButton {
     public String toString() {
         return this.labelCityName.getText();
     }
+
 }

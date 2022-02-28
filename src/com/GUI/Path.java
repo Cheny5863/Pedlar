@@ -5,8 +5,8 @@ import java.util.Stack;
 
 public class Path {
 
-    public Stack<CityBtn> listAllPoint;//保存一条路线 途径城市
-    private int distance;
+    public Stack<CityBtnAccessible> listAllPoint = new Stack<>();//保存一条路线 途径城市
+    private int distance = 0;
 
     public int getDistance() {
         return distance;
@@ -37,5 +37,31 @@ public class Path {
             return null;
 
         return pathShortest;
+    }
+
+    public String toString(){
+        int size = listAllPoint.size();
+        Stack<CityBtnAccessible> stackTemp = new Stack<>();
+        for (int i = 0;i < size; i++){
+            stackTemp.push(listAllPoint.pop());
+        }
+        String strTemp = new String();
+        strTemp += Integer.toString(this.distance) + " : ";
+        for (int i = 0;i < size; i++){
+            CityBtnAccessible cityBtnTemp = stackTemp.pop();
+            if (i != size-1){
+                strTemp += cityBtnTemp.getTarget().toString()+" ->  ";
+            }else {
+                strTemp += cityBtnTemp.getTarget().toString();
+            }
+            listAllPoint.push(cityBtnTemp);
+        }
+        return strTemp;
+    }
+    public Path clone(){
+        Path pathCopy = new Path();
+        pathCopy.listAllPoint = (Stack<CityBtnAccessible>) this.listAllPoint.clone();
+        pathCopy.distance = this.getDistance();
+        return pathCopy;
     }
 }

@@ -18,6 +18,7 @@ import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Stack;
 
 public class MainWindow extends FramelessWindow {
     public CityChessPanel paintPad;//画板
@@ -32,6 +33,9 @@ public class MainWindow extends FramelessWindow {
     private ArrayList<String> listLogInfo = new ArrayList<>();
     public RoundBtn btnInputConfirm;
     public RoundComboBox comboBoxBtnSelector;
+
+
+
 
     public MainWindow() {
         super();
@@ -286,10 +290,71 @@ public class MainWindow extends FramelessWindow {
                 if (cityBtnDestination == null) {
                     logToWindow("请先选择目的地");
                     return;
-                } else {
+                } else if (cityBtnDestination == cityBtnCurrent){
+                    logToWindow("起点不能和终点相同!!!");
+                }else{
+                    ArrayList<Path> listAllPath = new ArrayList<>();//保存可能符合条件的路径
                     //深度优先遍历 遍历结束后判断终点是否为目的地 如果是将此路径保留 回溯到上一顶点
+                    Path pathTemp = new Path();
+                    pathTemp.listAllPoint.push(new CityBtnAccessible(cityBtnCurrent,0));
+                    CityBtn cityBtnCurrent;
+                    CityBtnAccessible cityBtnAblePass;
 
+                    while(!pathTemp.listAllPoint.isEmpty()){//如果栈不为空
+                        cityBtnCurrent = pathTemp.listAllPoint.peek().getTarget();
+                        cityBtnCurrent.setPassed(true);//设置为走过
+                        for (CityBtn cityBtnUnVisted : //释放所有当前节点没走过的点
+                                cityBtnCurrent.listUnVisted) {
+                            cityBtnUnVisted.setPassed(false);
+                        }
 
+                        //System.out.println("cityBtnCur: "+cityBtnCurrent +" cityBtnDes: " +cityBtnDestination);
+                        if (cityBtnCurrent.equals(cityBtnDestination)){//如果到达终点了
+                            if (pathTemp.listAllPoint.size() == paintPad.listCityBtn.size())
+                                listAllPath.add(pathTemp.clone());
+                            logToWindow(pathTemp.toString());
+                            //将终点从路径弹出时 路径长度更新
+                            pathTemp.setDistance(pathTemp.getDistance() - pathTemp.listAllPoint.pop().getCost());
+                        }else{
+                            //如果有邻居没走过
+                            cityBtnAblePass = ArcInfo.getAblePass(cityBtnCurrent.listArcInfo);
+
+                            if(cityBtnAblePass != null){
+
+                                if (!cityBtnAblePass.getTarget().equals(cityBtnDestination)){
+                                    cityBtnDestination.setPassed(false);
+                                }
+
+                                cityBtnCurrent.listUnVisted.clear();//更新当前节点未访问的节点
+                                for (ArcInfo cityBtnTemp :
+                                        cityBtnCurrent.listArcInfo) {
+                                    CityBtn cityBtnUnVisted = cityBtnTemp.getmTarget();
+                                    if (!((cityBtnUnVisted.equals(cityBtnAblePass.getTarget()))||(cityBtnUnVisted.isPassed()))){
+                                        cityBtnCurrent.listUnVisted.add(cityBtnUnVisted);
+                                    }
+                                }
+
+                                pathTemp.setDistance(pathTemp.getDistance()+cityBtnAblePass.getCost());
+                                pathTemp.listAllPoint.push(cityBtnAblePass);//将可以进入的节点压入栈中
+
+                            }else{ //如果邻居都被走过了，弹出栈顶 并且路径长度也要更新
+                                CityBtnAccessible cityBtnPassed = pathTemp.listAllPoint.pop();
+                                pathTemp.setDistance(pathTemp.getDistance() - cityBtnPassed.getCost());
+                            };
+                        }
+                    }
+                    System.out.println("listAllPath Size: "+listAllPath.size());
+                    if (listAllPath.size() == 0)
+                        logToWindow("对不起没找到符合条件的路径，该图不存在满足给定起点与终点的哈密尔顿通路");
+                    for (Path pathShowLog :
+                            listAllPath) {
+                       logToWindow(pathShowLog.toString());
+                    }
+
+                    for (CityBtn cityBtnRestore:paintPad.listCityBtn){//出去前重置按钮状态
+                        cityBtnRestore.setPassed(false);
+                        cityBtnRestore.listUnVisted.clear();
+                    }
                 }
 
 

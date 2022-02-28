@@ -21,18 +21,26 @@ import java.util.HashMap;
 
 public class CityChessPanel extends RoundPanel {
 
-
-    public void setCityNum(int cityNum) {
-        this.cityNum = cityNum;
-    }
-    private ArrayList<Path> allPath = new ArrayList<>();
     private int cityNum = 0;
     private Point pointStart = new Point();
     private boolean isSettingArc = false;
     public ArrayList<CityBtn> listCityBtn = new ArrayList<>();
     public MainWindow frameMainWindow;
     private boolean isInputing = false;
+    private Path pathShortest = null;
 
+
+    public Path getPathShortest() {
+        return pathShortest;
+    }
+
+    public void setPathShortest(Path pathShortest) {
+        this.pathShortest = pathShortest;
+    }
+
+    public void setCityNum(int cityNum) {
+        this.cityNum = cityNum;
+    }
     public boolean isInputing() {
         return isInputing;
     }

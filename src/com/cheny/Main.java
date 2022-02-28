@@ -22,14 +22,13 @@ import java.awt.event.ActionListener;
 public class Main {
 
     public static void main(String[] args) throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException {
-        UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());//更改默认组件样式
         // write your code here
         MainWindow mainWindow = new MainWindow();
         mainWindow.setBackground(mainWindow.bgColor);
-
         mainWindow.setVisible(true);
+
         Graphics2D g2d = (Graphics2D) mainWindow.getContentPane().getGraphics();
-        //System.out.println(w.getGraphics());
         g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
     }

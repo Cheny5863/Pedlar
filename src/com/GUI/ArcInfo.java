@@ -1,5 +1,7 @@
 package com.GUI;
 
+import java.util.ArrayList;
+
 public class ArcInfo {
 
 
@@ -12,6 +14,8 @@ public class ArcInfo {
     private CityBtn mTarget = null;
     private int mDistance = 0;
     private boolean isDirected = false;
+    private boolean isOpened = true;
+
 
     public void setTextFieldOnArc(TextFieldOnArc textFieldOnArc) {
         this.textFieldOnArc = textFieldOnArc;
@@ -74,5 +78,17 @@ public class ArcInfo {
                 return true;
         }
         return false;
+    }
+
+    public static CityBtnAccessible getAblePass(ArrayList<ArcInfo> listArc){
+        CityBtnAccessible temp = null;
+        for (ArcInfo arcTemp :
+                listArc) {
+            if(!arcTemp.getmTarget().isPassed()){
+                temp =new CityBtnAccessible(arcTemp.getmTarget(),arcTemp.getmDistance());
+                break;
+            }
+        }
+        return temp;
     }
 }
