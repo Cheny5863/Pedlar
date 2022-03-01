@@ -5,12 +5,9 @@
 
 运行界面如下：
 
-![image](https://user-images.githubusercontent.com/40204259/155835795-20d983cc-c92a-42e4-b81b-359794f06480.png)
-
-
+![image](https://user-images.githubusercontent.com/40204259/156085798-ec59d538-56c2-435c-a0ea-c317bfb29f32.png)
 a GUI map algorithm（Graph shortest path algorithm） programe base on javaswing
 you can open this project with IDEA if want to run this program
 
 The user interface of this program:
-
-![image](https://user-images.githubusercontent.com/40204259/155835798-3b7261c1-0276-4181-bcfb-42e87005ce23.png)
+![image](https://user-images.githubusercontent.com/40204259/156085803-69b7961e-5cb4-4c67-b116-aec3f0ed95ff.png)
