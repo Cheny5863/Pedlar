@@ -1,5 +1,7 @@
 package com.GUI;
 
+import javafx.scene.shape.Arc;
+
 import java.util.ArrayList;
 
 public class PathResolver extends Path{
@@ -39,5 +41,26 @@ public class PathResolver extends Path{
             collectAllPath(null,end,mountCityBtn);
         }
 
+    }
+
+    public Path getBestPath(CityBtnAccessible start,int mountCityBtn){
+        Path result = null;
+        for (ArcInfo cityBtnTempEnd :
+                start.getTarget().listArcInfo) {
+            pathTemp.listAllPoint.clear();
+            collectAllPath(start,cityBtnTempEnd.getmTarget(),mountCityBtn);
+        }
+        for (ArcInfo cityBtnTempEnd :
+                start.getTarget().listArcInfo) {
+            for (Path path:listAllPath){
+                if (cityBtnTempEnd.getmTarget().equals(path.listAllPoint.peek().getTarget())){//如果路径末端是起点的邻接点 那么把起点压入栈构成回环
+                    path.listAllPoint.push(start);
+                    path.setDistance(path.getDistance()+cityBtnTempEnd.getmDistance());
+                }
+            }
+        }
+
+        result = Path.getShortest(listAllPath);
+        return result;
     }
 }

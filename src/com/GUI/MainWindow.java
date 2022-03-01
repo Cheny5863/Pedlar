@@ -290,8 +290,17 @@ public class MainWindow extends FramelessWindow {
                 if (cityBtnDestination == null) {
                     logToWindow("请先选择目的地");
                     return;
-                } else if (cityBtnDestination == cityBtnCurrent){
-                    logToWindow("起点不能和终点相同!!!");
+                } else if (cityBtnDestination.equals(cityBtnCurrent)){ //如果起点和终点相同那么就是绕行一周后回来
+                    PathResolver pathResolver = new PathResolver();
+                    Path pathShortest = pathResolver.getBestPath(new CityBtnAccessible(cityBtnCurrent,0),paintPad.listCityBtn.size());
+                    if (pathShortest == null)
+                        logToWindow("对不起没找到符合条件的路径，该图不存在满足给定起点与终点的哈密尔顿通路");
+                    else{
+                        paintPad.setPathShortest(pathShortest);
+                        paintPad.setDrawingPath(true);
+                        logToWindow(pathShortest.toString());
+                        logToWindow("右击面板可以取消最短路径的绘制噢！");
+                    }
                 }else{
                     PathResolver pathResolver = new PathResolver();
                     pathResolver.collectAllPath(new CityBtnAccessible(cityBtnCurrent,0),cityBtnDestination,paintPad.listCityBtn.size());

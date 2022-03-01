@@ -164,7 +164,9 @@ public class CityChessPanel extends RoundPanel {
                 }
             }
             if (isDrawingPath){
+                int perEnhance = 255/pathShortest.listAllPoint.size();
                 for (int i = 0; i < pathShortest.listAllPoint.size() - 1; i++){
+
                     CityBtn start = pathShortest.listAllPoint.get(i).getTarget();
                     CityBtn end =  pathShortest.listAllPoint.get(i+1).getTarget();
                     int x1 = start.getX() + start.getWidth() / 2;
@@ -178,7 +180,7 @@ public class CityChessPanel extends RoundPanel {
                     y1 = result[1];
                     x2 = result[2];
                     y2 = result[3];
-                    graphics.setColor(Color.red);
+                    graphics.setColor(new Color(255 - perEnhance*i,0,perEnhance*i));
                     graphics.drawLine(x1, y1, x2, y2);
                 }
             }

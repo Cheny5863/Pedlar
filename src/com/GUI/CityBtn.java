@@ -35,23 +35,12 @@ public class CityBtn extends JButton {
     private int startY = 0;
     private int lastX = 0;
     private int lastY = 0;
-    private int status = 0;//当前城市状态 0 未走过 1 已走过 2 已经走过并找到所有路径
     private int id = 0;
     private String strCityInfo = new String();
     public ArrayList<ArcInfo> listArcInfo = new ArrayList<>();
     public MainWindow frameMainWindow;
     public JLabel labelCityName;
-    public ArrayList<CityBtn> listUnVisted = new ArrayList<>();
     private boolean isClicked = false;
-
-
-    public int getStatus() {
-        return status;
-    }
-
-    public void setStatus(int status) {
-        this.status = status;
-    }
 
     public String getStrCityInfo() {
         return strCityInfo;
