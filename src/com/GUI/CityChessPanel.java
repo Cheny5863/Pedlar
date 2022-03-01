@@ -29,6 +29,12 @@ public class CityChessPanel extends RoundPanel {
     private boolean isInputing = false;
     private Path pathShortest = null;
 
+    public void setDrawingPath(boolean drawingPath) {
+        isDrawingPath = drawingPath;
+    }
+
+    private boolean isDrawingPath = false;
+
 
     public Path getPathShortest() {
         return pathShortest;
@@ -98,8 +104,11 @@ public class CityChessPanel extends RoundPanel {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
-                if (e.getButton() == 3)
+                if (e.getButton() == 3){
                     isSettingArc = false;
+                    isDrawingPath = false;
+                }
+
             }
         });
     }
@@ -138,59 +147,43 @@ public class CityChessPanel extends RoundPanel {
                     int y1 = btnTemp.getY() + btnTemp.getHeight() / 2;
                     int x2 = arcInfoTemp.getmTarget().getX() + arcInfoTemp.getmTarget().getWidth() / 2;
                     int y2 = arcInfoTemp.getmTarget().getY() + arcInfoTemp.getmTarget().getHeight() / 2;
+
                     double radius = btnTemp.getWidth() / 2;
-                    double theta = Math.PI / 2;
-                    if (x1 != x2) {
-                        double k = (double) (y1 - y2) / (double) (x2 - x1);
-                        theta = Math.atan(k);
-                    }
+                    int result[] = optimizePoint(x1,y1,x2,y2,radius); //优化点的显示
+                    x1 = result[0];
+                    y1 = result[1];
+                    x2 = result[2];
+                    y2 = result[3];
 
-                    if (theta > 0) {
-                        if (y1 >= y2) {
-                            y1 -= radius * Math.sin(theta);
-                            x1 += radius * Math.cos(theta);
-
-                            y2 += radius * Math.sin(theta);
-                            x2 -= radius * Math.cos(theta);
-                        } else {
-                            y2 -= radius * Math.sin(theta);
-                            x2 += radius * Math.cos(theta);
-
-                            y1 += radius * Math.sin(theta);
-                            x1 -= radius * Math.cos(theta);
-                        }
-                    } else if (theta < 0) {
-                        if (y1 >= y2) {
-                            y1 -= radius * Math.sin(-theta);
-                            x1 -= radius * Math.cos(-theta);
-
-                            y2 += radius * Math.sin(-theta);
-                            x2 += radius * Math.cos(-theta);
-                        } else {
-                            y2 -= radius * Math.sin(-theta);
-                            x2 -= radius * Math.cos(-theta);
-
-                            y1 += radius * Math.sin(-theta);
-                            x1 += radius * Math.cos(-theta);
-                        }
-
-                    } else {
-                        if (x1 > x2) {
-                            x1 -= radius;
-                            x2 += radius;
-                        } else {
-                            x1 += radius;
-                            x2 -= radius;
-                        }
-                    }
                     TextFieldOnArc textFieldOnArc = arcInfoTemp.getTextFieldOnArc();
                     textFieldOnArc.setBounds(((x1 + x2) / 2) - textFieldOnArc.getWidth() / 2, ((y1 + y2) / 2) - textFieldOnArc.getHeight() / 2 - 10, 50, 20);
                     textFieldOnArc.setText(Integer.toString((arcInfoTemp.getmDistance())));
                     graphics.drawLine(x1, y1, x2, y2);
                     this.add(textFieldOnArc, 0);
-                    repaint();
+
                 }
             }
+            if (isDrawingPath){
+                for (int i = 0; i < pathShortest.listAllPoint.size() - 1; i++){
+                    CityBtn start = pathShortest.listAllPoint.get(i).getTarget();
+                    CityBtn end =  pathShortest.listAllPoint.get(i+1).getTarget();
+                    int x1 = start.getX() + start.getWidth() / 2;
+                    int y1 = start.getY() + start.getHeight() / 2;
+                    int x2 = end.getX() + end.getWidth() / 2;
+                    int y2 = end.getY() + end.getHeight() / 2;
+
+                    double radius = start.getWidth() / 2;
+                    int result[] = optimizePoint(x1,y1,x2,y2,radius); //优化点的显示
+                    x1 = result[0];
+                    y1 = result[1];
+                    x2 = result[2];
+                    y2 = result[3];
+                    graphics.setColor(Color.red);
+                    graphics.drawLine(x1, y1, x2, y2);
+                }
+            }
+
+            repaint();
         }
 
 
@@ -233,7 +226,7 @@ public class CityChessPanel extends RoundPanel {
     //删除指定id的按钮
     public void deleteBtn() {
         CityBtn temp = frameMainWindow.cityBtnCurrent;
-
+        isDrawingPath = false;
         for (ArcInfo arcInfo :
                 temp.listArcInfo) { //从当前按钮的边列表里面找到边信息
             for (ArcInfo temp2 :
@@ -267,5 +260,56 @@ public class CityChessPanel extends RoundPanel {
             frameMainWindow.roundTextArea.textAreaReal.setText(frameMainWindow.cityBtnCurrent.getStrCityInfo());
         }
         repaint();
+    }
+
+    private int[] optimizePoint(int x1,int y1,int x2,int y2,double radius){
+        double theta = Math.PI / 2;
+
+        if (x1 != x2) {
+            double k = (double) (y1 - y2) / (double) (x2 - x1);
+            theta = Math.atan(k);
+        }
+
+        if (theta > 0) {
+            if (y1 >= y2) {
+                y1 -= radius * Math.sin(theta);
+                x1 += radius * Math.cos(theta);
+
+                y2 += radius * Math.sin(theta);
+                x2 -= radius * Math.cos(theta);
+            } else {
+                y2 -= radius * Math.sin(theta);
+                x2 += radius * Math.cos(theta);
+
+                y1 += radius * Math.sin(theta);
+                x1 -= radius * Math.cos(theta);
+            }
+        } else if (theta < 0) {
+            if (y1 >= y2) {
+                y1 -= radius * Math.sin(-theta);
+                x1 -= radius * Math.cos(-theta);
+
+                y2 += radius * Math.sin(-theta);
+                x2 += radius * Math.cos(-theta);
+            } else {
+                y2 -= radius * Math.sin(-theta);
+                x2 -= radius * Math.cos(-theta);
+
+                y1 += radius * Math.sin(-theta);
+                x1 += radius * Math.cos(-theta);
+            }
+
+        } else {
+            if (x1 > x2) {
+                x1 -= radius;
+                x2 += radius;
+            } else {
+                x1 += radius;
+                x2 -= radius;
+            }
+        }
+
+        int result[] = {x1,y1,x2,y2};
+        return result;
     }
 }

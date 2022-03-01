@@ -294,14 +294,21 @@ public class MainWindow extends FramelessWindow {
                     logToWindow("起点不能和终点相同!!!");
                 }else{
                     PathResolver pathResolver = new PathResolver();
-                    pathResolver.collectAllPath(new CityBtnAccessible(cityBtnCurrent,0),cityBtnDestination);
+                    pathResolver.collectAllPath(new CityBtnAccessible(cityBtnCurrent,0),cityBtnDestination,paintPad.listCityBtn.size());
 
                     for (Path pathTemp :
                             pathResolver.listAllPath) {
                         logToWindow(pathTemp.toString());
                     }
-                    if (pathResolver.listAllPath.size() == 0)
+                    Path pathShortest = Path.getShortest(pathResolver.listAllPath);
+                    if (pathShortest == null)
                         logToWindow("对不起没找到符合条件的路径，该图不存在满足给定起点与终点的哈密尔顿通路");
+                    else{
+                        paintPad.setPathShortest(pathShortest);
+                        paintPad.setDrawingPath(true);
+                        logToWindow("右击面板可以取消最短路径的绘制噢！");
+                    }
+
                 }
 
 
