@@ -19,12 +19,12 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f6e1bcdd-1522-439d-aa99-387d2708f507" name="Default Changelist" comment="实现寻路所得路径可视化">
+    <list default="true" id="f6e1bcdd-1522-439d-aa99-387d2708f507" name="Default Changelist" comment="优化">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/GUI/ArcInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/GUI/ArcInfo.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/com/GUI/CityBtn.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/GUI/CityBtn.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/com/GUI/CityChessPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/GUI/CityChessPanel.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/com/GUI/MainWindow.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/GUI/MainWindow.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/GUI/PathResolver.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/GUI/PathResolver.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -79,7 +79,7 @@
       <updated>1646018732561</updated>
       <workItem from="1646018737528" duration="22409000" />
       <workItem from="1646044391284" duration="17176000" />
-      <workItem from="1646094258541" duration="13385000" />
+      <workItem from="1646094258541" duration="36754000" />
     </task>
     <task id="LOCAL-00001" summary="实现了基本的寻路，但是有一点点bug，暂时存档">
       <created>1646030886841</created>
@@ -123,7 +123,14 @@
       <option name="project" value="LOCAL" />
       <updated>1646097002717</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="优化">
+      <created>1646117377917</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1646117377917</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -146,17 +153,18 @@
     <MESSAGE value="实现了基本的寻路，更进一步，少数路径没办法找出，存下档" />
     <MESSAGE value="彻底实现寻路算法，所有bug均已解决" />
     <MESSAGE value="实现寻路所得路径可视化" />
-    <option name="LAST_COMMIT_MESSAGE" value="实现寻路所得路径可视化" />
+    <MESSAGE value="优化" />
+    <option name="LAST_COMMIT_MESSAGE" value="优化" />
   </component>
   <component name="WindowStateProjectService">
     <state x="223" y="72" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1646019046187">
       <screen x="0" y="0" width="1536" height="834" />
     </state>
     <state x="223" y="72" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1536.834@0.0.1536.834" timestamp="1646019046187" />
-    <state x="884" y="113" key="#com.intellij.ide.util.MemberChooser" timestamp="1646095500081">
+    <state x="884" y="113" key="#com.intellij.ide.util.MemberChooser" timestamp="1646183113578">
       <screen x="0" y="0" width="1536" height="834" />
     </state>
-    <state x="884" y="113" key="#com.intellij.ide.util.MemberChooser/0.0.1536.834@0.0.1536.834" timestamp="1646095500081" />
+    <state x="884" y="113" key="#com.intellij.ide.util.MemberChooser/0.0.1536.834@0.0.1536.834" timestamp="1646183113578" />
     <state x="498" y="206" key="#com.intellij.ide.util.TreeClassChooserDialog" timestamp="1646018811948">
       <screen x="0" y="0" width="1536" height="834" />
     </state>
@@ -173,50 +181,50 @@
       <screen x="0" y="0" width="1536" height="834" />
     </state>
     <state width="475" height="438" key="DebuggerActiveHint/0.0.1536.834@0.0.1536.834" timestamp="1646046234741" />
-    <state width="1016" height="423" key="GridCell.Tab.0.bottom" timestamp="1646113729714">
+    <state width="1493" height="153" key="GridCell.Tab.0.bottom" timestamp="1646182941661">
       <screen x="0" y="0" width="1536" height="834" />
     </state>
-    <state width="1016" height="423" key="GridCell.Tab.0.bottom/0.0.1536.834@0.0.1536.834" timestamp="1646113729714" />
-    <state width="1016" height="423" key="GridCell.Tab.0.center" timestamp="1646113729714">
+    <state width="1493" height="153" key="GridCell.Tab.0.bottom/0.0.1536.834@0.0.1536.834" timestamp="1646182941661" />
+    <state width="1493" height="153" key="GridCell.Tab.0.center" timestamp="1646182941661">
       <screen x="0" y="0" width="1536" height="834" />
     </state>
-    <state width="1016" height="423" key="GridCell.Tab.0.center/0.0.1536.834@0.0.1536.834" timestamp="1646113729714" />
-    <state width="1016" height="423" key="GridCell.Tab.0.left" timestamp="1646113729713">
+    <state width="1493" height="153" key="GridCell.Tab.0.center/0.0.1536.834@0.0.1536.834" timestamp="1646182941661" />
+    <state width="1493" height="153" key="GridCell.Tab.0.left" timestamp="1646182941661">
       <screen x="0" y="0" width="1536" height="834" />
     </state>
-    <state width="1016" height="423" key="GridCell.Tab.0.left/0.0.1536.834@0.0.1536.834" timestamp="1646113729713" />
-    <state width="1016" height="423" key="GridCell.Tab.0.right" timestamp="1646113729714">
+    <state width="1493" height="153" key="GridCell.Tab.0.left/0.0.1536.834@0.0.1536.834" timestamp="1646182941661" />
+    <state width="1493" height="153" key="GridCell.Tab.0.right" timestamp="1646182941661">
       <screen x="0" y="0" width="1536" height="834" />
     </state>
-    <state width="1016" height="423" key="GridCell.Tab.0.right/0.0.1536.834@0.0.1536.834" timestamp="1646113729714" />
-    <state width="1016" height="423" key="GridCell.Tab.1.bottom" timestamp="1646113729715">
+    <state width="1493" height="153" key="GridCell.Tab.0.right/0.0.1536.834@0.0.1536.834" timestamp="1646182941661" />
+    <state width="1493" height="230" key="GridCell.Tab.1.bottom" timestamp="1646182236737">
       <screen x="0" y="0" width="1536" height="834" />
     </state>
-    <state width="1016" height="423" key="GridCell.Tab.1.bottom/0.0.1536.834@0.0.1536.834" timestamp="1646113729715" />
-    <state width="1016" height="423" key="GridCell.Tab.1.center" timestamp="1646113729714">
+    <state width="1493" height="230" key="GridCell.Tab.1.bottom/0.0.1536.834@0.0.1536.834" timestamp="1646182236737" />
+    <state width="1493" height="230" key="GridCell.Tab.1.center" timestamp="1646182236737">
       <screen x="0" y="0" width="1536" height="834" />
     </state>
-    <state width="1016" height="423" key="GridCell.Tab.1.center/0.0.1536.834@0.0.1536.834" timestamp="1646113729714" />
-    <state width="1016" height="423" key="GridCell.Tab.1.left" timestamp="1646113729714">
+    <state width="1493" height="230" key="GridCell.Tab.1.center/0.0.1536.834@0.0.1536.834" timestamp="1646182236737" />
+    <state width="1493" height="230" key="GridCell.Tab.1.left" timestamp="1646182236737">
       <screen x="0" y="0" width="1536" height="834" />
     </state>
-    <state width="1016" height="423" key="GridCell.Tab.1.left/0.0.1536.834@0.0.1536.834" timestamp="1646113729714" />
-    <state width="1016" height="423" key="GridCell.Tab.1.right" timestamp="1646113729714">
+    <state width="1493" height="230" key="GridCell.Tab.1.left/0.0.1536.834@0.0.1536.834" timestamp="1646182236737" />
+    <state width="1493" height="230" key="GridCell.Tab.1.right" timestamp="1646182236737">
       <screen x="0" y="0" width="1536" height="834" />
     </state>
-    <state width="1016" height="423" key="GridCell.Tab.1.right/0.0.1536.834@0.0.1536.834" timestamp="1646113729714" />
+    <state width="1493" height="230" key="GridCell.Tab.1.right/0.0.1536.834@0.0.1536.834" timestamp="1646182236737" />
     <state x="418" y="95" width="996" height="707" key="SettingsEditor" timestamp="1646099881017">
       <screen x="0" y="0" width="1536" height="834" />
     </state>
     <state x="418" y="95" width="996" height="707" key="SettingsEditor/0.0.1536.834@0.0.1536.834" timestamp="1646099881017" />
-    <state x="361" y="150" key="Vcs.Push.Dialog.v2" timestamp="1646097068973">
+    <state x="361" y="150" key="Vcs.Push.Dialog.v2" timestamp="1646117432766">
       <screen x="0" y="0" width="1536" height="834" />
     </state>
-    <state x="361" y="150" key="Vcs.Push.Dialog.v2/0.0.1536.834@0.0.1536.834" timestamp="1646097068973" />
-    <state x="563" y="330" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1646097054783">
+    <state x="361" y="150" key="Vcs.Push.Dialog.v2/0.0.1536.834@0.0.1536.834" timestamp="1646117432766" />
+    <state x="563" y="330" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1646117422184">
       <screen x="0" y="0" width="1536" height="834" />
     </state>
-    <state x="563" y="330" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1536.834@0.0.1536.834" timestamp="1646097054783" />
+    <state x="563" y="330" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1536.834@0.0.1536.834" timestamp="1646117422184" />
     <state x="431" y="155" width="672" height="678" key="search.everywhere.popup" timestamp="1646095994373">
       <screen x="0" y="0" width="1536" height="834" />
     </state>
@@ -225,13 +233,10 @@
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
-        <line-breakpoint enabled="true" type="java-method">
-          <url>file://$PROJECT_DIR$/src/com/GUI/PathResolver.java</url>
-          <line>45</line>
-          <properties class="com.GUI.PathResolver" method="getBestPath">
-            <option name="EMULATED" value="true" />
-          </properties>
-          <option name="timeStamp" value="1" />
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/com/GUI/CityChessPanel.java</url>
+          <line>385</line>
+          <option name="timeStamp" value="3" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
@@ -243,6 +248,7 @@
         <watch expression="pathTemp" language="JAVA" />
         <watch expression="pathTemp" language="JAVA" />
         <watch expression="pathTemp" language="JAVA" />
+        <watch expression="pointTemp.y" language="JAVA" />
       </configuration>
     </watches-manager>
   </component>

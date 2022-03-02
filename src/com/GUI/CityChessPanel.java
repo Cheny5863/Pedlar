@@ -7,6 +7,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.Timer;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.FlowLayout;
@@ -14,10 +15,13 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.RenderingHints;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Stack;
 
 public class CityChessPanel extends RoundPanel {
 
@@ -28,13 +32,28 @@ public class CityChessPanel extends RoundPanel {
     public MainWindow frameMainWindow;
     private boolean isInputing = false;
     private Path pathShortest = null;
+    private boolean isKeepPath = false;
 
-    public void setDrawingPath(boolean drawingPath) {
-        isDrawingPath = drawingPath;
+    public boolean isDrawedPath() {
+        return isDrawedPath;
     }
 
-    private boolean isDrawingPath = false;
+    public void setDrawedPath(boolean drawedPath) {
+        isDrawedPath = drawedPath;
+    }
 
+    private boolean isDrawedPath = true;
+    private int locationCurDrawed = 0;
+    Stack<Point> stackAllDrawPoint = new Stack<>();
+
+
+    public boolean isKeepPath() {
+        return isKeepPath;
+    }
+
+    public void setKeepPath(boolean keepPath) {
+        isKeepPath = keepPath;
+    }
 
     public Path getPathShortest() {
         return pathShortest;
@@ -106,7 +125,8 @@ public class CityChessPanel extends RoundPanel {
                 super.mouseClicked(e);
                 if (e.getButton() == 3){
                     isSettingArc = false;
-                    isDrawingPath = false;
+                    isKeepPath = false;
+                    isDrawedPath = true;
                 }
 
             }
@@ -163,7 +183,7 @@ public class CityChessPanel extends RoundPanel {
 
                 }
             }
-            if (isDrawingPath){
+            if (isKeepPath){ //维持计算得到的路径
                 int perEnhance = 255/pathShortest.listAllPoint.size();
                 for (int i = 0; i < pathShortest.listAllPoint.size() - 1; i++){
 
@@ -182,6 +202,27 @@ public class CityChessPanel extends RoundPanel {
                     y2 = result[3];
                     graphics.setColor(new Color(255 - perEnhance*i,0,perEnhance*i));
                     graphics.drawLine(x1, y1, x2, y2);
+                }
+            }
+            if (!isDrawedPath){
+                if (locationCurDrawed <= stackAllDrawPoint.size()-2){
+                    locationCurDrawed++;
+                    try {
+                        Thread.sleep(50);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    for (int i = 0; i < locationCurDrawed;i++){
+                        Point pointStart = stackAllDrawPoint.get(i);
+                        Point pointEnd = stackAllDrawPoint.get(i+1);
+                        System.out.println(pointStart.getX()+","+pointStart.getY()+" -> "+pointEnd.getX()+","+pointEnd.getY());
+                        graphics.setColor(Color.red);
+                        graphics.drawLine(pointStart.x, pointStart.y, pointEnd.x, pointEnd.y);
+                    }
+                    //repaint();
+                }else{
+                    isKeepPath = true;
+                    isDrawedPath = true;
                 }
             }
 
@@ -228,7 +269,7 @@ public class CityChessPanel extends RoundPanel {
     //删除指定id的按钮
     public void deleteBtn() {
         CityBtn temp = frameMainWindow.cityBtnCurrent;
-        isDrawingPath = false;
+        isKeepPath = false;
         for (ArcInfo arcInfo :
                 temp.listArcInfo) { //从当前按钮的边列表里面找到边信息
             for (ArcInfo temp2 :
@@ -271,7 +312,6 @@ public class CityChessPanel extends RoundPanel {
             double k = (double) (y1 - y2) / (double) (x2 - x1);
             theta = Math.atan(k);
         }
-
         if (theta > 0) {
             if (y1 >= y2) {
                 y1 -= radius * Math.sin(theta);
@@ -314,4 +354,87 @@ public class CityChessPanel extends RoundPanel {
         int result[] = {x1,y1,x2,y2};
         return result;
     }
+
+    public void drawnPathWithAnimation(){
+        stackAllDrawPoint.clear();//初始化
+        locationCurDrawed = 0; //初始化
+        isDrawedPath = false;
+        for (int i = 0; i < pathShortest.listAllPoint.size() - 1; i++){
+            CityBtn start = pathShortest.listAllPoint.get(i).getTarget();
+            CityBtn end =  pathShortest.listAllPoint.get(i+1).getTarget();
+            int x1 = start.getX() + start.getWidth() / 2;
+            int y1 = start.getY() + start.getHeight() / 2;
+            int x2 = end.getX() + end.getWidth() / 2;
+            int y2 = end.getY() + end.getHeight() / 2;
+
+            double radius = start.getWidth() / 2;
+            int result[] = optimizePoint(x1,y1,x2,y2,radius); //优化点的显示
+            x1 = result[0];
+            y1 = result[1];
+            x2 = result[2];
+            y2 = result[3];
+            double theta = Math.PI / 2;
+            if (x1 != x2) {
+                double k = (double) (y1 - y2) / (double) (x2 - x1);
+                theta = Math.atan(k);
+            }
+            double span = 5; //线性插值的间隔
+            Point pointStart = new Point(x1,y1);
+            Point pointTemp = new Point(x1,y1);
+            int spanTimes = 1;
+            if (theta > 0){ // 顺时针倾斜
+                if (y1 > y2){ //起点在终点下方
+                    while(pointTemp.getY() >= y2 && pointTemp.getX() <= x2){
+                        stackAllDrawPoint.push((Point) pointTemp.clone());
+                        pointTemp.y = (int)(pointStart.getY() - spanTimes*span*Math.sin(theta));
+                        pointTemp.x =  (int)(pointStart.getX() + spanTimes*span*Math.cos(theta));
+                        spanTimes++;
+                    }
+                    stackAllDrawPoint.push(new Point(x2,y2));
+                }else{ //起点在上方
+                    while(pointTemp.getY() <= y2 && pointTemp.getX() >= x2){
+                        stackAllDrawPoint.push((Point) pointTemp.clone());
+                        pointTemp.y = (int)(pointStart.getY() + spanTimes*span*Math.sin(theta));
+                        pointTemp.x =  (int)(pointStart.getX() - spanTimes*span*Math.cos(theta));
+                        spanTimes++;
+                    }
+                    stackAllDrawPoint.push(new Point(x2,y2));
+                }
+            }else if(theta < 0){ // 逆顺时针倾斜
+                if (y1 > y2){ //起点在终点下方
+                    while(pointTemp.getY() >= y2 && pointTemp.getX() >= x2){
+                        stackAllDrawPoint.push((Point) pointTemp.clone());
+                        pointTemp.y = (int)(pointStart.getY() - spanTimes*span*Math.sin(-theta));
+                        pointTemp.x =  (int)(pointStart.getX() - spanTimes*span*Math.cos(-theta));
+                        spanTimes++;
+                    }
+                    stackAllDrawPoint.push(new Point(x2,y2));
+                }else{
+                    while(pointTemp.getY() <= y2 && pointTemp.getX() <= x2){//起点在上方
+                        stackAllDrawPoint.push((Point) pointTemp.clone());
+                        pointTemp.y = (int)(pointStart.getY() + spanTimes*span*Math.sin(-theta));
+                        pointTemp.x =  (int)(pointStart.getX() + spanTimes*span*Math.cos(-theta));
+                        spanTimes++;
+                    }
+                    stackAllDrawPoint.push(new Point(x2,y2));
+                }
+
+            }else {
+                if (x1 > x2) {
+                    while(pointTemp.getX() >= x2){//起点在右边
+                        stackAllDrawPoint.push((Point) pointTemp.clone());
+                        pointTemp.x -= span;
+                    }
+                    stackAllDrawPoint.push(new Point(x2,y2));
+                } else {
+                    while(pointTemp.getX() <= x2){//起点在左边
+                        stackAllDrawPoint.push((Point) pointTemp.clone());
+                        pointTemp.x += span;
+                    }
+                    stackAllDrawPoint.push(new Point(x2,y2));
+                }
+            }
+        }
+    }
+
 }

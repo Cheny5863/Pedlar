@@ -215,11 +215,19 @@ public class MainWindow extends FramelessWindow {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (cityBtnCurrent != null) {
-                    cityBtnCurrent.labelCityName.setText(textFieldCityName.getText());
-                    cityBtnCurrent.setStrCityInfo(roundTextArea.textAreaReal.getText());
+                    boolean ifChange = true;
+                    for (CityBtn cityBtnTemp: paintPad.listCityBtn){
+                        if (cityBtnTemp.toString().equals(textFieldCityName.getText())){
+                            logToWindow("修改失败！已存在重名城市");
+                            ifChange = false;
+                        }
+                    }
+                    if (ifChange){
+                        cityBtnCurrent.labelCityName.setText(textFieldCityName.getText());
+                        cityBtnCurrent.setStrCityInfo(roundTextArea.textAreaReal.getText());
+                        logToWindow("修改成功!!!");
+                    }
                     updateComboBox();//修改按钮后需要更新下拉框
-
-                    logToWindow("修改成功!!!");
                 } else {
                     logToWindow("当前还没有选中城市");
                 }
@@ -297,7 +305,7 @@ public class MainWindow extends FramelessWindow {
                         logToWindow("对不起没找到符合条件的路径，该图不存在满足给定起点与终点的哈密尔顿通路");
                     else{
                         paintPad.setPathShortest(pathShortest);
-                        paintPad.setDrawingPath(true);
+                        paintPad.drawnPathWithAnimation();
                         logToWindow(pathShortest.toString());
                         logToWindow("右击面板可以取消最短路径的绘制噢！");
                     }
@@ -314,7 +322,7 @@ public class MainWindow extends FramelessWindow {
                         logToWindow("对不起没找到符合条件的路径，该图不存在满足给定起点与终点的哈密尔顿通路");
                     else{
                         paintPad.setPathShortest(pathShortest);
-                        paintPad.setDrawingPath(true);
+                        paintPad.drawnPathWithAnimation();
                         logToWindow("右击面板可以取消最短路径的绘制噢！");
                     }
 

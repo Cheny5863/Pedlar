@@ -80,7 +80,7 @@ public class CityBtn extends JButton {
         super();
         //初始化定时器
         this.id = id;
-        timer = new Timer(500, taskPerformer);
+        timer = new Timer(300, taskPerformer);
         this.frameMainWindow = frameMainWindow;
         parent = (RoundPanel) this.getParent();
         labelCityName = new JLabel();

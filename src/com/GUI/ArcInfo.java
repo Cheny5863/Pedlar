@@ -16,7 +16,6 @@ public class ArcInfo {
     private boolean isDirected = false;
     private boolean isOpened = true;
 
-
     public void setTextFieldOnArc(TextFieldOnArc textFieldOnArc) {
         this.textFieldOnArc = textFieldOnArc;
     }
