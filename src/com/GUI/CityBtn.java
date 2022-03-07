@@ -89,7 +89,7 @@ public class CityBtn extends JButton {
         setSize(btnWidth, btnHeight);
         Font font = new Font("微软雅黑", Font.BOLD, 14);
         labelCityName.setFont(font);
-        labelCityName.setForeground(new Color(116, 169, 181));
+        labelCityName.setForeground(new Color(239, 187, 222));
         labelCityName.setVisible(true);
         setContentAreaFilled(false);
         this.setBorderPainted(false); // 不绘制边框
@@ -117,7 +117,7 @@ public class CityBtn extends JButton {
                         //添加边到当前城市
                         if (frameMainWindow.cityBtnCurrent.addArcToVel(that, 0, true)) {
                             frameMainWindow.logToWindow("添加成功");
-                            that.addArcToVel(frameMainWindow.cityBtnCurrent, 0, false);//添加成功则添加反向的边
+                            //that.addArcToVel(frameMainWindow.cityBtnCurrent, 0, false);//添加成功则添加反向的边
                         } else {
                             frameMainWindow.logToWindow("边重复");
                         }
@@ -212,9 +212,10 @@ public class CityBtn extends JButton {
         if (getModel().isArmed()) {
             g.setColor(Color.lightGray); // 点击时高亮
         } else if (frameMainWindow.cityBtnCurrent == this) {
-            g.setColor(Color.YELLOW);
+
+            g.setColor(new Color(255, 120, 216));
         } else {
-            g.setColor(getBackground());
+            g.setColor(new Color(239, 187, 222));
         }
         // fillOval方法画一个矩形的内切椭圆，并且填充这个椭圆，
         // 当矩形为正方形时，画出的椭圆便是圆

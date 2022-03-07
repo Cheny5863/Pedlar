@@ -38,9 +38,9 @@ public class RoundBtn extends JButton {
         if (getModel().isArmed()) {
             g2d.setColor(Color.LIGHT_GRAY); // 点击时高亮
         } else if (getModel().isEnabled() == false) {
-            g2d.setColor(new Color(206, 206, 206));
+            g2d.setColor(new Color(101, 64, 85));
         } else {
-            g2d.setColor(new Color(103, 223, 136));
+            g2d.setColor(new Color(244,145,199));
         }
         //fillRoundRect方法绘制一个圆角矩形
         g.fillRoundRect(0, 0, getSize().width - 1, getSize().height - 1, arcw, arch);//填充圆角矩形边界

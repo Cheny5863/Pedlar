@@ -19,6 +19,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.geom.Path2D;
+import java.awt.geom.Point2D;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Stack;
@@ -33,7 +36,6 @@ public class CityChessPanel extends RoundPanel {
     private boolean isInputing = false;
     private Path pathShortest = null;
     private boolean isKeepPath = false;
-
     public boolean isDrawedPath() {
         return isDrawedPath;
     }
@@ -107,6 +109,7 @@ public class CityChessPanel extends RoundPanel {
 
     public CityChessPanel(int arcw, int arch, MainWindow frameMainWindow) {
         super(arcw, arch);
+
         this.frameMainWindow = frameMainWindow;
         addMouseMotionListener(new MouseAdapter() {
             @Override
@@ -141,7 +144,13 @@ public class CityChessPanel extends RoundPanel {
         graphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
         graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         graphics.setStroke(stroke);
-        graphics.setColor(new Color(103, 223, 136));
+        graphics.setColor(new Color(238,137,198));
+
+
+
+
+
+
         if (isSettingArc) {
             graphics.drawLine(pointStart.x, pointStart.y, pointEndLast.x, pointEndLast.y);
             repaint();
@@ -168,23 +177,50 @@ public class CityChessPanel extends RoundPanel {
                     int x2 = arcInfoTemp.getmTarget().getX() + arcInfoTemp.getmTarget().getWidth() / 2;
                     int y2 = arcInfoTemp.getmTarget().getY() + arcInfoTemp.getmTarget().getHeight() / 2;
 
-                    double radius = btnTemp.getWidth() / 2;
+                    double radius = btnTemp.getWidth()/2;
                     int result[] = optimizePoint(x1,y1,x2,y2,radius); //优化点的显示
                     x1 = result[0];
                     y1 = result[1];
                     x2 = result[2];
                     y2 = result[3];
 
-                    TextFieldOnArc textFieldOnArc = arcInfoTemp.getTextFieldOnArc();
-                    textFieldOnArc.setBounds(((x1 + x2) / 2) - textFieldOnArc.getWidth() / 2, ((y1 + y2) / 2) - textFieldOnArc.getHeight() / 2 - 10, 50, 20);
-                    textFieldOnArc.setText(Integer.toString((arcInfoTemp.getmDistance())));
+                    double k1 = Math.atan((double)(y1-y2)/(x1-x2));
+                    double t = 30;
+                    int[] offset = new int[4];
+                    int length = 12;
+                    Point triangleOrigin = new Point((x1+x2)/2,(y1+y2)/2);
+                    offset[0] = (int) Math.round(length * Math.cos((Math.toRadians(t)-k1)));
+                    offset[1] = (int) Math.round(length * Math.sin((Math.toRadians(t)-k1)));
+                    offset[2] = (int) Math.round(length * Math.cos((Math.toRadians(t)+k1)));
+                    offset[3] = (int) Math.round(length * Math.sin((Math.toRadians(t)+k1)));
+
+                    if(x2>x1) {
+                        Triangle_Shape triangleShape = new Triangle_Shape(
+                                new Point2D.Double(triangleOrigin.x - offset[0], triangleOrigin.y + offset[1]),
+                                new Point2D.Double(triangleOrigin.x - offset[2], triangleOrigin.y - offset[3]),
+                                new Point2D.Double(triangleOrigin.x, triangleOrigin.y));
+                        graphics.fill(triangleShape);
+                    }else {
+                        Triangle_Shape triangleShape = new Triangle_Shape(
+                                new Point2D.Double(triangleOrigin.x + offset[0], triangleOrigin.y - offset[1]),
+                                new Point2D.Double(triangleOrigin.x, triangleOrigin.y),
+                                new Point2D.Double(triangleOrigin.x + offset[2], triangleOrigin.y + offset[3]));
+                        graphics.fill(triangleShape);
+                    }
+
+
+//                    TextFieldOnArc textFieldOnArc = arcInfoTemp.getTextFieldOnArc();
+//                    textFieldOnArc.setBounds(((x1 + x2) / 2) - textFieldOnArc.getWidth() / 2, ((y1 + y2) / 2) - textFieldOnArc.getHeight() / 2 - 10, 50, 20);
+//                    textFieldOnArc.setText(Integer.toString((arcInfoTemp.getmDistance())));
+
                     graphics.drawLine(x1, y1, x2, y2);
-                    this.add(textFieldOnArc, 0);
+                    //this.add(textFieldOnArc, 0);
 
                 }
             }
             if (isKeepPath){ //维持计算得到的路径
                 int perEnhance = 255/pathShortest.listAllPoint.size();
+
                 for (int i = 0; i < pathShortest.listAllPoint.size() - 1; i++){
 
                     CityBtn start = pathShortest.listAllPoint.get(i).getTarget();
@@ -196,10 +232,13 @@ public class CityChessPanel extends RoundPanel {
 
                     double radius = start.getWidth() / 2;
                     int result[] = optimizePoint(x1,y1,x2,y2,radius); //优化点的显示
+
                     x1 = result[0];
                     y1 = result[1];
                     x2 = result[2];
                     y2 = result[3];
+
+
                     graphics.setColor(new Color(255 - perEnhance*i,0,perEnhance*i));
                     graphics.drawLine(x1, y1, x2, y2);
                 }
@@ -246,7 +285,7 @@ public class CityChessPanel extends RoundPanel {
                 CityBtn btn = new CityBtn(frameMainWindow, cityNum);
                 btn.setLocation(xOld, yOld);
                 btn.labelCityName.setBounds(xOld - 25, yOld + btn.getHeight() / 2 + 5, btn.getWidth() + 50, btn.getHeight() + 10);
-                btn.setBackground(Color.orange);
+                btn.setBackground(new Color(239, 187, 222));
                 btn.setClicked(true);
                 frameMainWindow.cityBtnCurrent = btn;
                 frameMainWindow.textFieldCityName.setText("");
@@ -303,55 +342,26 @@ public class CityChessPanel extends RoundPanel {
         repaint();
     }
     //路径线性插值函数
-    private int[] optimizePoint(int x1,int y1,int x2,int y2,double radius){
-        double theta = Math.PI / 2;
-
-        if (x1 != x2) {
-            double k = (double) (y1 - y2) / (double) (x2 - x1);
-            theta = Math.atan(k);
+    public int[] optimizePoint(int x1,int y1,int x2,int y2,double radius){
+        double k1 = Math.atan((double)(y1-y2)/(x1-x2));
+        int[] result = new int[2];
+        result[0] = (int) Math.round(radius * Math.cos(k1));
+        result[1] = (int) Math.round(radius * Math.sin(k1));
+        int[] result1 = new int[4];
+        if(x1<x2) {
+            result1[0] = x1 + result[0];
+            result1[1] = y1 + result[1];
+            result1[2] = x2 - result[0];
+            result1[3] = y2 - result[1];
+        }else {
+            result1[0] = x1 - result[0];
+            result1[1] = y1 - result[1];
+            result1[2] = x2 + result[0];
+            result1[3] = y2 + result[1];
         }
-        if (theta > 0) {
-            if (y1 >= y2) {
-                y1 -= radius * Math.sin(theta);
-                x1 += radius * Math.cos(theta);
-
-                y2 += radius * Math.sin(theta);
-                x2 -= radius * Math.cos(theta);
-            } else {
-                y2 -= radius * Math.sin(theta);
-                x2 += radius * Math.cos(theta);
-
-                y1 += radius * Math.sin(theta);
-                x1 -= radius * Math.cos(theta);
-            }
-        } else if (theta < 0) {
-            if (y1 >= y2) {
-                y1 -= radius * Math.sin(-theta);
-                x1 -= radius * Math.cos(-theta);
-
-                y2 += radius * Math.sin(-theta);
-                x2 += radius * Math.cos(-theta);
-            } else {
-                y2 -= radius * Math.sin(-theta);
-                x2 -= radius * Math.cos(-theta);
-
-                y1 += radius * Math.sin(-theta);
-                x1 += radius * Math.cos(-theta);
-            }
-
-        } else {
-            if (x1 > x2) {
-                x1 -= radius;
-                x2 += radius;
-            } else {
-                x1 += radius;
-                x2 -= radius;
-            }
-        }
-
-        int result[] = {x1,y1,x2,y2};
-        return result;
+        return result1;
     }
+
 
     public void drawnPathWithAnimation(){
         stackAllDrawPoint.clear();//初始化
@@ -436,4 +446,12 @@ public class CityChessPanel extends RoundPanel {
         }
     }
 
+}
+class Triangle_Shape extends Path2D.Double {
+    public Triangle_Shape(Point2D... points) {
+        moveTo(points[0].getX(), points[0].getY());
+        lineTo(points[1].getX(), points[1].getY());
+        lineTo(points[2].getX(), points[2].getY());
+        closePath();
+    }
 }

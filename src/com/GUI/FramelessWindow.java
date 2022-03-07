@@ -14,7 +14,7 @@ public class FramelessWindow extends JFrame {
     private int xOld = 0;
     private int yOld = 0;
     private int windowHeight = 700;
-    private int windowWidth = 1000;
+    private int windowWidth = 800;
     private int menuBarHeight = 80;
     public JPanel container = new JPanel();
     public Color bgColor = new Color(238,238,238);

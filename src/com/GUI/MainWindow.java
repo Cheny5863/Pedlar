@@ -19,22 +19,24 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Stack;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class MainWindow extends FramelessWindow {
     public CityChessPanel paintPad;//画板
     public RoundPanel controller;//控制区
     public RoundPanel inputCityArea, curCityArea, departureArea;//控制区的三个小功能区
-    public JPanel logTop, logBottom;//log区的上下两部分
     public BorderTextField textFieldCityName;
     public RoundTextArea roundTextArea;
     public CityBtn cityBtnCurrent = null;
-    public RoundTextArea textAreaLog;
     public BorderTextField inputCity;
     private ArrayList<String> listLogInfo = new ArrayList<>();
     public RoundBtn btnInputConfirm;
     public RoundComboBox comboBoxBtnSelector;
-
-
+    private Color bigBGColor = new Color(245,157,205);
+    private Color smallAreaColor = new Color(245,109,183);
+    private Color btnColor = new Color(244,145,199);
+    private Color textAreaColor = new Color(238,137,198);
 
 
     public MainWindow() {
@@ -42,16 +44,10 @@ public class MainWindow extends FramelessWindow {
 
         //左右两个容器
         JPanel leftPanel = new JPanel();
-        RoundPanel rightPanel = new RoundPanel(20, 20);
-
-        //leftPanel.setSize(771,646);
         leftPanel.setBackground(bgColor);
-        // rightPanel.setSize(184,646);
-        rightPanel.setBackground(Color.white);
-        rightPanel.setPreferredSize(new Dimension(200, getHeight() - 100));
+
 
         container.add(leftPanel, BorderLayout.CENTER);
-        container.add(rightPanel, BorderLayout.EAST);
 
         //左容器内容 = 上（画板） + 下（控制台）
         //画板
@@ -61,7 +57,7 @@ public class MainWindow extends FramelessWindow {
         JFrame.setDefaultLookAndFeelDecorated(true);
         //控制台
         controller = new RoundPanel(20, 20);
-        controller.setBackground(new Color(175, 217, 209));
+        controller.setBackground(bigBGColor);
         controller.setPreferredSize(new Dimension(leftPanel.getWidth(), 200));
         //添加路径的方式，双击起点单击终点
 
@@ -89,7 +85,7 @@ public class MainWindow extends FramelessWindow {
         //将标题添加至panel
         controlerTop.add(titleController);
 
-        //控制台实际操作部位 分为三个区 录入区 当前城市区 出发区
+        //控制台实际操作部位 分为三个区 录入区 当前房间区 出发区
         int height = 130, widthInput = 250, widthCurCity = 290, widthDeparture = 140;
 
         inputCityArea = new RoundPanel(50, 50);
@@ -99,9 +95,9 @@ public class MainWindow extends FramelessWindow {
         inputCityArea.setPreferredSize(new Dimension(widthInput, height));
         curCityArea.setPreferredSize(new Dimension(widthCurCity, height));
         departureArea.setPreferredSize(new Dimension(widthDeparture, height));
-        inputCityArea.setBackground(new Color(116, 169, 181));
-        curCityArea.setBackground(new Color(116, 169, 181));
-        departureArea.setBackground(new Color(116, 169, 181));
+        inputCityArea.setBackground(smallAreaColor);
+        curCityArea.setBackground(smallAreaColor);
+        departureArea.setBackground(smallAreaColor);
         //录入区内部组件
         inputCityArea.setLayout(new BoxLayout(inputCityArea, BoxLayout.Y_AXIS));
         JPanel inputAreaTop, inputAreaBottom;
@@ -116,7 +112,7 @@ public class MainWindow extends FramelessWindow {
         inputAreaBottom.setPreferredSize(new Dimension(controller.getWidth(), 400));
         //设置标题和文字大小
         inputAreaTop.setLayout(new FlowLayout(FlowLayout.LEFT, 15, 10));
-        JLabel titleInputArea = new JLabel("录入城市:");
+        JLabel titleInputArea = new JLabel("录入房间:");
         titleInputArea.setFont(new Font("微软雅黑", Font.BOLD, 15));
         titleInputArea.setForeground(Color.white);
         //将标题添加至panel
@@ -127,7 +123,7 @@ public class MainWindow extends FramelessWindow {
 
         //录入区下半部分的组件
         inputAreaBottom.setLayout(new FlowLayout(FlowLayout.CENTER, 15, 25));
-        inputCity = new BorderTextField(20, true, "请输入录入城市个数");
+        inputCity = new BorderTextField(20, true, "请输入录入房间个数");
         inputCity.setNumOnly(true);
         inputCity.setPreferredSize(new Dimension(200, 30));
         inputCity.setBackground(null);
@@ -135,7 +131,7 @@ public class MainWindow extends FramelessWindow {
         inputCity.setFrameMainWindow(this);
         inputCity.setMaxInputNum(3);
         btnInputConfirm = new RoundBtn(20, 20, 60, 30);
-        btnInputConfirm.setBackground(Color.black);
+        btnInputConfirm.setBackground(btnColor);
         btnInputConfirm.setText("确认");
         //将录入区的搜索栏和按钮放入容器
         inputAreaBottom.add(inputCity);
@@ -145,7 +141,7 @@ public class MainWindow extends FramelessWindow {
         btnInputConfirm.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (!inputCity.getText().equals(new String("请输入录入城市个数"))) {
+                if (!inputCity.getText().equals(new String("请输入录入房间个数"))) {
                     //点击后禁用确认按键
                     btnInputConfirm.setEnabled(false);
                     //创建一个弹出窗口
@@ -155,16 +151,16 @@ public class MainWindow extends FramelessWindow {
                     if (inputMount > 1) {
                         frameInput.btnConfirm.setText("下一个");
                     }
-                    frameInput.labelTitle.setText("请输入第1个城市信息");
+                    frameInput.labelTitle.setText("请输入第1个房间信息");
                 } else {
-                    logToWindow("请先输入待录入城市个数");
+                    logToWindow("请先输入待录入房间个数");
                 }
 
             }
         });
 
 
-        //当前城市区内部组件
+        //当前房间区内部组件
         curCityArea.setLayout(new BoxLayout(curCityArea, BoxLayout.Y_AXIS));
         JPanel curCityTop, curCityBottom;
         curCityTop = new JPanel();
@@ -177,12 +173,12 @@ public class MainWindow extends FramelessWindow {
         //设置标题和文字大小
         curCityTop.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 4));
 
-        JLabel titleCurCityArea = new JLabel("当前城市:");
+        JLabel titleCurCityArea = new JLabel("当前房间:");
         textFieldCityName = new BorderTextField(5, false, null);
         textFieldCityName.setPreferredSize(new Dimension(100, 30));
         textFieldCityName.setFont(new Font("微软雅黑", Font.BOLD, 15));
         textFieldCityName.setHorizontalAlignment(SwingConstants.CENTER);
-        textFieldCityName.setForeground(new Color(103, 223, 136));
+        textFieldCityName.setForeground(btnColor);
         titleCurCityArea.setFont(new Font("微软雅黑", Font.BOLD, 15));
         titleCurCityArea.setForeground(Color.white);
         //将标题添加至panel
@@ -192,23 +188,23 @@ public class MainWindow extends FramelessWindow {
         curCityArea.add(Box.createVerticalStrut(10));
         curCityArea.add(curCityBottom);
 
-        //当前城市下部分组件
+        //当前房间下部分组件
         curCityBottom.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 0));
 
         //设置文本域的参数
         roundTextArea = new RoundTextArea(20, 20, 180, 80, false, null);
-        roundTextArea.textAreaReal.setBackground(new Color(163, 204, 202));
+        roundTextArea.textAreaReal.setBackground(textAreaColor);
         roundTextArea.textAreaReal.setForeground(Color.white);
         //roundTextArea.textAreaReal.setEditable(false);
         roundTextArea.textAreaReal.setFont(new Font("微软雅黑", Font.BOLD, 12));
         roundTextArea.setAutoscrolls(true);
-        roundTextArea.setBackground(new Color(163, 204, 202));
+        roundTextArea.setBackground(textAreaColor);
         RoundBtn btnDeleConfirm = new RoundBtn(20, 20, 60, 20);
-        btnDeleConfirm.setBackground(new Color(103, 223, 136));
+        btnDeleConfirm.setBackground(btnColor);
         btnDeleConfirm.setText("删除");
 
         RoundBtn btnRevise = new RoundBtn(20, 20, 60, 30);
-        btnRevise.setBackground(new Color(103, 223, 136));
+        btnRevise.setBackground(btnColor);
         btnRevise.setText("修改");
 
         btnRevise.addActionListener(new ActionListener() {
@@ -218,7 +214,7 @@ public class MainWindow extends FramelessWindow {
                     boolean ifChange = true;
 //                    for (CityBtn cityBtnTemp: paintPad.listCityBtn){
 //                        if (cityBtnTemp.toString().equals(textFieldCityName.getText())){
-//                            logToWindow("修改失败！已存在重名城市");
+//                            logToWindow("修改失败！已存在重名房间");
 //                            ifChange = false;
 //                        }
 //                    }
@@ -231,7 +227,7 @@ public class MainWindow extends FramelessWindow {
                     cityBtnCurrent.setStrCityInfo(roundTextArea.textAreaReal.getText());
                     updateComboBox();//修改按钮后需要更新下拉框
                 } else {
-                    logToWindow("当前还没有选中城市");
+                    logToWindow("当前还没有选中房间");
                 }
 
             }
@@ -245,7 +241,7 @@ public class MainWindow extends FramelessWindow {
                     roundTextArea.textAreaReal.setText("");
                     paintPad.deleteBtn();
                 } else {
-                    logToWindow("当前还没有选中城市");
+                    logToWindow("当前还没有选中房间");
                 }
 
             }
@@ -287,7 +283,7 @@ public class MainWindow extends FramelessWindow {
         departTop.add(comboBoxBtnSelector);
         //将按钮添加至panel
         RoundBtn btnDepart = new RoundBtn(15, 15, 100, 50);
-        btnDepart.setBackground(new Color(103, 223, 136));
+        btnDepart.setBackground(btnColor);
         btnDepart.setText("Go");
         btnDepart.setFont(new Font("微软雅黑", Font.BOLD, 36));
         departBottom.add(btnDepart);
@@ -300,17 +296,6 @@ public class MainWindow extends FramelessWindow {
                 if (cityBtnDestination == null) {
                     logToWindow("请先选择目的地");
                     return;
-                } else if (cityBtnDestination.equals(cityBtnCurrent)){ //如果起点和终点相同那么就是绕行一周后回来
-                    PathResolver pathResolver = new PathResolver();
-                    Path pathShortest = pathResolver.getBestPath(new CityBtnAccessible(cityBtnCurrent,0),paintPad.listCityBtn.size());
-                    if (pathShortest == null)
-                        logToWindow("对不起没找到符合条件的路径，该图不存在满足给定起点与终点的哈密尔顿通路");
-                    else{
-                        paintPad.setPathShortest(pathShortest);
-                        paintPad.drawnPathWithAnimation();
-                        logToWindow(pathShortest.toString());
-                        logToWindow("右击面板可以取消最短路径的绘制噢！");
-                    }
                 }else{
                     PathResolver pathResolver = new PathResolver();
                     pathResolver.collectAllPath(new CityBtnAccessible(cityBtnCurrent,0),cityBtnDestination,paintPad.listCityBtn.size());
@@ -321,7 +306,7 @@ public class MainWindow extends FramelessWindow {
                     }
                     Path pathShortest = Path.getShortest(pathResolver.listAllPath);
                     if (pathShortest == null)
-                        logToWindow("对不起没找到符合条件的路径，该图不存在满足给定起点与终点的哈密尔顿通路");
+                        logToWindow("对不起没找到符合条件的路径，这两个房间不相通");
                     else{
                         paintPad.setPathShortest(pathShortest);
                         paintPad.drawnPathWithAnimation();
@@ -351,60 +336,24 @@ public class MainWindow extends FramelessWindow {
         leftPanel.add(middleGap);
         leftPanel.add(controller);
 
-        //右容器内容 = Log窗口
-        rightPanel.setBackground(new Color(175, 217, 209));
 
-        //Log窗的内容
-        rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
-
-        logTop = new JPanel();
-        logBottom = new JPanel();
-        rightPanel.add(logTop);
-        rightPanel.add(logBottom);
-
-        //设置控制台上下两部分的属性
-        logTop.setBackground(null);
-        logBottom.setBackground(null);
-        logTop.setPreferredSize(new Dimension(rightPanel.getWidth(), 50));
-        logBottom.setPreferredSize(new Dimension(rightPanel.getWidth(), 760));
-
-        textAreaLog = new RoundTextArea(20, 20, 170, 570, false, null);
-        textAreaLog.setBackground(new Color(163, 204, 202));
-        textAreaLog.textAreaReal.setBackground(new Color(163, 204, 202));
-        textAreaLog.textAreaReal.setFont(new Font("微软雅黑", Font.BOLD, 14));
-        textAreaLog.textAreaReal.setForeground(Color.white);
-        logTop.setLayout(new FlowLayout(FlowLayout.LEFT));
-        JLabel titleLog = new JLabel("Log");
-        titleLog.setFont(new Font("微软雅黑", Font.BOLD, 32));
-        titleLog.setForeground(Color.white);
-        textAreaLog.textAreaReal.setEditable(false);
-
-        logTop.add(titleLog);
-        logBottom.add(textAreaLog);
 
 
     }
 
     public void logToWindow(String sth) {
-        if (sth == "")
-            return;
-        Date now = new Date(); // 创建一个Date对象，获取当前时间
-        // 指定格式化格式
-        SimpleDateFormat f = new SimpleDateFormat("HH:mm:ss ");
-        String strTime = f.format(now);
-        listLogInfo.add(strTime + " " + sth);
+        TimerTask task = new TimerTask() {
+            @Override
+            public void run() {
+                // 重写 run() 方法，返回系统时间
+                System.out.println(sth);
 
-        if (listLogInfo.size() == 201) {//限制log区的大小
-            listLogInfo.remove(0);
-        }
+            }
+        };
+        Timer timer = new Timer();
 
-        StringBuffer buffer = new StringBuffer();
-        for (String str :
-                listLogInfo) {
-            buffer.append(str);
-            buffer.append("\n\n");
-        }
-        textAreaLog.textAreaReal.setText(buffer.toString());
+        // 在经过 2000 毫秒的初始化延时后执行一次（单词执行）
+        timer.schedule(task, 2000);
     }
 
     public void updateComboBox() {
@@ -415,7 +364,7 @@ public class MainWindow extends FramelessWindow {
         }
     }
 
-    public boolean isOrigin(CityBtn another){ //返回传入的城市是否是起点
+    public boolean isOrigin(CityBtn another){ //返回传入的房间是否是起点
         return cityBtnCurrent.equals(another);
     }
 

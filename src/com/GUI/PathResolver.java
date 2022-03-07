@@ -20,10 +20,7 @@ public class PathResolver extends Path{
 
             pathTemp.listAllPoint.push(new CityBtnAccessible(start.getTarget(),start.getCost()));
             pathTemp.setDistance(pathTemp.getDistance() + start.getCost());
-
-            if (pathTemp.listAllPoint.size() == mountCityBtn){
-                listAllPath.add(pathTemp.clone());
-            }
+            listAllPath.add(pathTemp.clone());
             //出栈并且修改 路径距离
             pathTemp.setDistance(pathTemp.getDistance() - pathTemp.listAllPoint.pop().getCost());
         }else {
