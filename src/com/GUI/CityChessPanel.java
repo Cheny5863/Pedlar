@@ -208,14 +208,14 @@ public class CityChessPanel extends RoundPanel {
                 if (locationCurDrawed <= stackAllDrawPoint.size()-2){
                     locationCurDrawed++;
                     try {
-                        Thread.sleep(50);
+                        Thread.sleep(20);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
                     for (int i = 0; i < locationCurDrawed;i++){
                         Point pointStart = stackAllDrawPoint.get(i);
                         Point pointEnd = stackAllDrawPoint.get(i+1);
-                        System.out.println(pointStart.getX()+","+pointStart.getY()+" -> "+pointEnd.getX()+","+pointEnd.getY());
+                        //.out.println(pointStart.getX()+","+pointStart.getY()+" -> "+pointEnd.getX()+","+pointEnd.getY());
                         graphics.setColor(Color.red);
                         graphics.drawLine(pointStart.x, pointStart.y, pointEnd.x, pointEnd.y);
                     }
@@ -246,7 +246,6 @@ public class CityChessPanel extends RoundPanel {
                 CityBtn btn = new CityBtn(frameMainWindow, cityNum);
                 btn.setLocation(xOld, yOld);
                 btn.labelCityName.setBounds(xOld - 25, yOld + btn.getHeight() / 2 + 5, btn.getWidth() + 50, btn.getHeight() + 10);
-
                 btn.setBackground(Color.orange);
                 btn.setClicked(true);
                 frameMainWindow.cityBtnCurrent = btn;
@@ -255,7 +254,6 @@ public class CityChessPanel extends RoundPanel {
                 listCityBtn.add(btn);
                 that.add(btn);
                 that.add(btn.labelCityName);
-
                 //添加城市后更新下拉框的候选项
                 frameMainWindow.updateComboBox();
 
@@ -304,7 +302,7 @@ public class CityChessPanel extends RoundPanel {
         }
         repaint();
     }
-
+    //路径线性插值函数
     private int[] optimizePoint(int x1,int y1,int x2,int y2,double radius){
         double theta = Math.PI / 2;
 
@@ -359,6 +357,7 @@ public class CityChessPanel extends RoundPanel {
         stackAllDrawPoint.clear();//初始化
         locationCurDrawed = 0; //初始化
         isDrawedPath = false;
+        isKeepPath = false;
         for (int i = 0; i < pathShortest.listAllPoint.size() - 1; i++){
             CityBtn start = pathShortest.listAllPoint.get(i).getTarget();
             CityBtn end =  pathShortest.listAllPoint.get(i+1).getTarget();
@@ -378,7 +377,7 @@ public class CityChessPanel extends RoundPanel {
                 double k = (double) (y1 - y2) / (double) (x2 - x1);
                 theta = Math.atan(k);
             }
-            double span = 5; //线性插值的间隔
+            double span = 2; //线性插值的间隔
             Point pointStart = new Point(x1,y1);
             Point pointTemp = new Point(x1,y1);
             int spanTimes = 1;

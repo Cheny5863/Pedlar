@@ -216,17 +216,19 @@ public class MainWindow extends FramelessWindow {
             public void actionPerformed(ActionEvent e) {
                 if (cityBtnCurrent != null) {
                     boolean ifChange = true;
-                    for (CityBtn cityBtnTemp: paintPad.listCityBtn){
-                        if (cityBtnTemp.toString().equals(textFieldCityName.getText())){
-                            logToWindow("修改失败！已存在重名城市");
-                            ifChange = false;
-                        }
-                    }
-                    if (ifChange){
-                        cityBtnCurrent.labelCityName.setText(textFieldCityName.getText());
-                        cityBtnCurrent.setStrCityInfo(roundTextArea.textAreaReal.getText());
-                        logToWindow("修改成功!!!");
-                    }
+//                    for (CityBtn cityBtnTemp: paintPad.listCityBtn){
+//                        if (cityBtnTemp.toString().equals(textFieldCityName.getText())){
+//                            logToWindow("修改失败！已存在重名城市");
+//                            ifChange = false;
+//                        }
+//                    }
+//                    if (ifChange){
+//                        cityBtnCurrent.labelCityName.setText(textFieldCityName.getText());
+//                        cityBtnCurrent.setStrCityInfo(roundTextArea.textAreaReal.getText());
+//                        logToWindow("修改成功!!!");
+//                    }
+                    cityBtnCurrent.labelCityName.setText(textFieldCityName.getText());
+                    cityBtnCurrent.setStrCityInfo(roundTextArea.textAreaReal.getText());
                     updateComboBox();//修改按钮后需要更新下拉框
                 } else {
                     logToWindow("当前还没有选中城市");
