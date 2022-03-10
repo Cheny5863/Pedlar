@@ -13,7 +13,7 @@ public class ArcInfo {
     private CityBtn mStart = null;
     private CityBtn mTarget = null;
     private int mDistance = 0;
-    private boolean isDirected = true;
+    private boolean isDirected = false;
     private boolean isOpened = true;
 
     public void setTextFieldOnArc(TextFieldOnArc textFieldOnArc) {
@@ -48,6 +48,10 @@ public class ArcInfo {
         this.mDistance = mDistance;
         this.mStart = mStart;
 
+    }
+
+    public ArcInfo(int Distance){
+        this.mDistance = Distance;
     }
 
     public CityBtn getmTarget() {

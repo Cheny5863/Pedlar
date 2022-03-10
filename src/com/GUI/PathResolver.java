@@ -1,5 +1,6 @@
 package com.GUI;
 
+import javafx.scene.AccessibleAction;
 import javafx.scene.shape.Arc;
 
 import java.util.ArrayList;
@@ -7,57 +8,79 @@ import java.util.ArrayList;
 public class PathResolver extends Path{
     public  ArrayList<Path> listAllPath = new ArrayList<>();
     private  Path pathTemp = new Path(0);
+    private ArrayList<CityBtn> listAllCityBtn;
+    private int positionRecall = -1;
+    private int positionSub = 0;//上一次分割的位置
 
-    public PathResolver(){
-
+    public PathResolver(ArrayList<CityBtn> listAllCityBtn){
+        this.listAllCityBtn = listAllCityBtn;
+        for (CityBtn cityBtn ://把所有点的访问状态重置
+                listAllCityBtn) {
+            cityBtn.setVisted(false);
+        }
     }
 
-    public void collectAllPath(CityBtnAccessible start,CityBtn end,int mountCityBtn){
-        if (start == null){ //如果是空那么 路径已经是完整的了，只不过路径的终点不是目标点 舍弃
-            //System.out.println(pathTemp);
-            pathTemp.setDistance(pathTemp.getDistance() - pathTemp.listAllPoint.pop().getCost());
-        }else if(start.getTarget().equals(end)){//如果是目标点 那么不完整因为被拦截了 所以加入目标点保存即可
-
-            pathTemp.listAllPoint.push(new CityBtnAccessible(start.getTarget(),start.getCost()));
-            pathTemp.setDistance(pathTemp.getDistance() + start.getCost());
-            listAllPath.add(pathTemp.clone());
-            //出栈并且修改 路径距离
-            pathTemp.setDistance(pathTemp.getDistance() - pathTemp.listAllPoint.pop().getCost());
-        }else {
+    public void generateSmallestTree(CityBtnAccessible start){
+        if(start != null){
             pathTemp.listAllPoint.push(start);
-            pathTemp.setDistance(pathTemp.getDistance() + start.getCost());
-            boolean isTail = true;
-            for (int i = 0; i < start.getTarget().listArcInfo.size();i++){
-                CityBtn cityBtnTemp = start.getTarget().listArcInfo.get(i).getmTarget();
-                if (!isInPath(cityBtnTemp,pathTemp)){
-                    isTail = false;
-                    int cost = start.getTarget().listArcInfo.get(i).getmDistance();
-                    collectAllPath(new CityBtnAccessible(cityBtnTemp,cost),end,mountCityBtn);
+            start.getTarget().setVisted(true);
+        }else{
+            if (isFinished()){
+                //listAllPath.add(pathTemp);
+                Path pathPartition = new Path(0);//把路径切割后放入路径表
+                for (int i = positionSub; i < pathTemp.listAllPoint.size();i++){
+                    pathPartition.listAllPoint.add(pathTemp.listAllPoint.get(i).clone());
                 }
+                listAllPath.add(pathPartition);
+                return;
+            } //如果已经完成最小生成树的生成
+            if (!pathTemp.listAllPoint.isEmpty()){//如果路径非空说明还能回溯
+                Path pathPartition = new Path(0);//把路径切割后放入路径表
+                for (int i = positionSub; i < pathTemp.listAllPoint.size();i++){
+                    pathPartition.listAllPoint.add(pathTemp.listAllPoint.get(i).clone());
+                }
+                listAllPath.add(pathPartition);
+                positionSub = pathTemp.listAllPoint.size();
+                positionRecall = positionRecall==-1? (pathTemp.listAllPoint.size()-2) : (positionRecall-1);
+                generateSmallestTree(pathTemp.listAllPoint.get(positionRecall));
+                return;
             }
-            collectAllPath(null,end,mountCityBtn);
         }
-
+        CityBtnAccessible cityBtnAccessible = getFitNode(start.getTarget());
+        if (cityBtnAccessible != null){
+            generateSmallestTree(cityBtnAccessible);
+        }else{
+            generateSmallestTree(null);
+        }
     }
 
-    public Path getBestPath(CityBtnAccessible start,int mountCityBtn){
-        Path result = null;
-        for (ArcInfo cityBtnTempEnd :
-                start.getTarget().listArcInfo) {
-            pathTemp.listAllPoint.clear();
-            collectAllPath(start,cityBtnTempEnd.getmTarget(),mountCityBtn);
-        }
-        for (ArcInfo cityBtnTempEnd :
-                start.getTarget().listArcInfo) {
-            for (Path path:listAllPath){
-                if (cityBtnTempEnd.getmTarget().equals(path.listAllPoint.peek().getTarget())){//如果路径末端是起点的邻接点 那么把起点压入栈构成回环
-                    path.listAllPoint.push(start);
-                    path.setDistance(path.getDistance()+cityBtnTempEnd.getmDistance());
-                }
+    private boolean isFinished(){
+        boolean result = true;
+        for (CityBtn cityBtnTemp :
+                listAllCityBtn) {
+            if (!cityBtnTemp.isVisted()){//如果有节点还没有被访问说明还没完成最小生成树的生成
+                result = false;
             }
-        }
-
-        result = Path.getShortest(listAllPath);
+        };
         return result;
     }
+
+    private CityBtnAccessible getFitNode(CityBtn start){
+        ArcInfo arcFit = new ArcInfo(Integer.MAX_VALUE);
+
+        for (ArcInfo arcInfo :
+                start.listArcInfo) {
+            if (!arcInfo.getmTarget().isVisted()){
+
+                if (arcInfo.getmDistance() < arcFit.getmDistance()) {
+                    arcFit = arcInfo;
+                }
+
+            }
+
+        }
+        return arcFit.getmDistance() == Integer.MAX_VALUE?
+                null : new CityBtnAccessible(arcFit.getmTarget(),arcFit.getmDistance());
+    }
+
 }

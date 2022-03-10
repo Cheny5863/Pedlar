@@ -37,9 +37,15 @@ public class CityChessPanel extends RoundPanel {
     public ArrayList<CityBtn> listCityBtn = new ArrayList<>();
     public MainWindow frameMainWindow;
     private boolean isInputing = false;
-    private Path pathShortest = null;
+
+    public void setListSmallestTree(ArrayList<Path> listSmallestTree) {
+        this.listSmallestTree = listSmallestTree;
+    }
+
+    private ArrayList<Path> listSmallestTree = null;
     private boolean isKeepPath = false;
     public JTextField textFieldTips = new JTextField();
+
 
     public boolean isDrawedPath() {
         return isDrawedPath;
@@ -51,8 +57,8 @@ public class CityChessPanel extends RoundPanel {
 
     private boolean isDrawedPath = true;
     private int locationCurDrawed = 0;
-    Stack<Point> stackAllDrawPoint = new Stack<>();
-
+    private int indexCurDrawed = 0;
+    ArrayList<Stack<Point>> listAllStackDrawPoint = new ArrayList<>();
 
     public boolean isKeepPath() {
         return isKeepPath;
@@ -62,13 +68,6 @@ public class CityChessPanel extends RoundPanel {
         isKeepPath = keepPath;
     }
 
-    public Path getPathShortest() {
-        return pathShortest;
-    }
-
-    public void setPathShortest(Path pathShortest) {
-        this.pathShortest = pathShortest;
-    }
 
     public void setCityNum(int cityNum) {
         this.cityNum = cityNum;
@@ -159,11 +158,6 @@ public class CityChessPanel extends RoundPanel {
         graphics.setStroke(stroke);
         graphics.setColor(new Color(238,137,198));
 
-
-
-
-
-
         if (isSettingArc) {
             graphics.drawLine(pointStart.x, pointStart.y, pointEndLast.x, pointEndLast.y);
             repaint();
@@ -197,84 +191,67 @@ public class CityChessPanel extends RoundPanel {
                     x2 = result[2];
                     y2 = result[3];
 
-                    double k1 = Math.atan((double)(y1-y2)/(x1-x2));
-                    double t = 30;
-                    int[] offset = new int[4];
-                    int length = 12;
-                    Point triangleOrigin = new Point((x1+x2)/2,(y1+y2)/2);
-                    offset[0] = (int) Math.round(length * Math.cos((Math.toRadians(t)-k1)));
-                    offset[1] = (int) Math.round(length * Math.sin((Math.toRadians(t)-k1)));
-                    offset[2] = (int) Math.round(length * Math.cos((Math.toRadians(t)+k1)));
-                    offset[3] = (int) Math.round(length * Math.sin((Math.toRadians(t)+k1)));
-
-                    if(x2>x1) {
-                        Triangle_Shape triangleShape = new Triangle_Shape(
-                                new Point2D.Double(triangleOrigin.x - offset[0], triangleOrigin.y + offset[1]),
-                                new Point2D.Double(triangleOrigin.x - offset[2], triangleOrigin.y - offset[3]),
-                                new Point2D.Double(triangleOrigin.x, triangleOrigin.y));
-                        graphics.fill(triangleShape);
-                    }else {
-                        Triangle_Shape triangleShape = new Triangle_Shape(
-                                new Point2D.Double(triangleOrigin.x + offset[0], triangleOrigin.y - offset[1]),
-                                new Point2D.Double(triangleOrigin.x, triangleOrigin.y),
-                                new Point2D.Double(triangleOrigin.x + offset[2], triangleOrigin.y + offset[3]));
-                        graphics.fill(triangleShape);
-                    }
-
-
-//                    TextFieldOnArc textFieldOnArc = arcInfoTemp.getTextFieldOnArc();
-//                    textFieldOnArc.setBounds(((x1 + x2) / 2) - textFieldOnArc.getWidth() / 2, ((y1 + y2) / 2) - textFieldOnArc.getHeight() / 2 - 10, 50, 20);
-//                    textFieldOnArc.setText(Integer.toString((arcInfoTemp.getmDistance())));
+                    TextFieldOnArc textFieldOnArc = arcInfoTemp.getTextFieldOnArc();
+                    textFieldOnArc.setBounds(((x1 + x2) / 2) - textFieldOnArc.getWidth() / 2, ((y1 + y2) / 2) - textFieldOnArc.getHeight() / 2 - 10, 50, 20);
+                    textFieldOnArc.setText(Integer.toString((arcInfoTemp.getmDistance())));
 
                     graphics.drawLine(x1, y1, x2, y2);
-                    //this.add(textFieldOnArc, 0);
+                    this.add(textFieldOnArc, 0);
 
                 }
             }
             if (isKeepPath){ //维持计算得到的路径
-                int perEnhance = 255/pathShortest.listAllPoint.size();
 
-                for (int i = 0; i < pathShortest.listAllPoint.size() - 1; i++){
+                for (Path pathShortest: listSmallestTree){
+                    int perEnhance = 255/pathShortest.listAllPoint.size();
 
-                    CityBtn start = pathShortest.listAllPoint.get(i).getTarget();
-                    CityBtn end =  pathShortest.listAllPoint.get(i+1).getTarget();
-                    int x1 = start.getX() + start.getWidth() / 2;
-                    int y1 = start.getY() + start.getHeight() / 2;
-                    int x2 = end.getX() + end.getWidth() / 2;
-                    int y2 = end.getY() + end.getHeight() / 2;
+                    for (int i = 0; i < pathShortest.listAllPoint.size() - 1; i++){
 
-                    double radius = start.getWidth() / 2;
-                    int result[] = optimizePoint(x1,y1,x2,y2,radius); //优化点的显示
+                        CityBtn start = pathShortest.listAllPoint.get(i).getTarget();
+                        CityBtn end =  pathShortest.listAllPoint.get(i+1).getTarget();
+                        int x1 = start.getX() + start.getWidth() / 2;
+                        int y1 = start.getY() + start.getHeight() / 2;
+                        int x2 = end.getX() + end.getWidth() / 2;
+                        int y2 = end.getY() + end.getHeight() / 2;
 
-                    x1 = result[0];
-                    y1 = result[1];
-                    x2 = result[2];
-                    y2 = result[3];
+                        double radius = start.getWidth() / 2;
+                        int result[] = optimizePoint(x1,y1,x2,y2,radius); //优化点的显示
+
+                        x1 = result[0];
+                        y1 = result[1];
+                        x2 = result[2];
+                        y2 = result[3];
 
 
-                    graphics.setColor(new Color(255 - perEnhance*i,0,perEnhance*i));
-                    graphics.drawLine(x1, y1, x2, y2);
+                        graphics.setColor(new Color(255 - perEnhance*i,0,perEnhance*i));
+                        graphics.drawLine(x1, y1, x2, y2);
+                    }
                 }
             }
             if (!isDrawedPath){
-                if (locationCurDrawed <= stackAllDrawPoint.size()-2){
-                    locationCurDrawed++;
-                    try {
-                        Thread.sleep(20);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
+                if (indexCurDrawed < listAllStackDrawPoint.size()){
+                    if (locationCurDrawed <= listAllStackDrawPoint.get(indexCurDrawed).size()-2){
+                        locationCurDrawed++;
+                        try {
+                            Thread.sleep(20);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        for (int i = 0; i < locationCurDrawed;i++){
+                            Point pointStart = listAllStackDrawPoint.get(indexCurDrawed).get(i);
+                            Point pointEnd = listAllStackDrawPoint.get(indexCurDrawed).get(i+1);
+                            //.out.println(pointStart.getX()+","+pointStart.getY()+" -> "+pointEnd.getX()+","+pointEnd.getY());
+                            graphics.setColor(Color.red);
+                            graphics.drawLine(pointStart.x, pointStart.y, pointEnd.x, pointEnd.y);
+                        }
+                        //repaint();
+                    }else{
+                        indexCurDrawed++;
+                        locationCurDrawed = 0;
                     }
-                    for (int i = 0; i < locationCurDrawed;i++){
-                        Point pointStart = stackAllDrawPoint.get(i);
-                        Point pointEnd = stackAllDrawPoint.get(i+1);
-                        //.out.println(pointStart.getX()+","+pointStart.getY()+" -> "+pointEnd.getX()+","+pointEnd.getY());
-                        graphics.setColor(Color.red);
-                        graphics.drawLine(pointStart.x, pointStart.y, pointEnd.x, pointEnd.y);
-                    }
-                    //repaint();
                 }else{
                     isKeepPath = true;
-                    isDrawedPath = true;
+                    isDrawedPath = true;//设置已经演示过动画
                 }
             }
 
@@ -301,13 +278,11 @@ public class CityChessPanel extends RoundPanel {
                 btn.setBackground(new Color(239, 187, 222));
                 btn.setClicked(true);
                 frameMainWindow.cityBtnCurrent = btn;
-                frameMainWindow.textFieldCityName.setText("");
-                frameMainWindow.roundTextArea.textAreaReal.setText("");
+                frameMainWindow.textFieldCityName.setText(btn.labelCityName.getText());
                 listCityBtn.add(btn);
                 that.add(btn);
                 that.add(btn.labelCityName);
-                //添加城市后更新下拉框的候选项
-                frameMainWindow.updateComboBox();
+
 
                 that.repaint();//重新绘制 不然会出现需要鼠标滑过才显示的问题
             }
@@ -341,7 +316,6 @@ public class CityChessPanel extends RoundPanel {
         this.remove(temp); //从显示面板上去掉它
         this.remove(temp.labelCityName);
         listCityBtn.remove(temp); //删除按钮对象
-        frameMainWindow.updateComboBox();//删除按钮后需要更新下拉框
 
         if (listCityBtn.isEmpty()) {
             frameMainWindow.cityBtnCurrent = null;
@@ -377,94 +351,91 @@ public class CityChessPanel extends RoundPanel {
 
 
     public void drawnPathWithAnimation(){
-        stackAllDrawPoint.clear();//初始化
+        listAllStackDrawPoint.clear();//初始化
         locationCurDrawed = 0; //初始化
+        indexCurDrawed = 0;
         isDrawedPath = false;
         isKeepPath = false;
-        for (int i = 0; i < pathShortest.listAllPoint.size() - 1; i++){
-            CityBtn start = pathShortest.listAllPoint.get(i).getTarget();
-            CityBtn end =  pathShortest.listAllPoint.get(i+1).getTarget();
-            int x1 = start.getX() + start.getWidth() / 2;
-            int y1 = start.getY() + start.getHeight() / 2;
-            int x2 = end.getX() + end.getWidth() / 2;
-            int y2 = end.getY() + end.getHeight() / 2;
+        for (Path pathShortest: listSmallestTree) {
+            Stack<Point> stackAllDrawPoint = new Stack<>();
+            for (int i = 0; i < pathShortest.listAllPoint.size() - 1; i++) {
+                CityBtn start = pathShortest.listAllPoint.get(i).getTarget();
+                CityBtn end = pathShortest.listAllPoint.get(i + 1).getTarget();
+                int x1 = start.getX() + start.getWidth() / 2;
+                int y1 = start.getY() + start.getHeight() / 2;
+                int x2 = end.getX() + end.getWidth() / 2;
+                int y2 = end.getY() + end.getHeight() / 2;
 
-            double radius = start.getWidth() / 2;
-            int result[] = optimizePoint(x1,y1,x2,y2,radius); //优化点的显示
-            x1 = result[0];
-            y1 = result[1];
-            x2 = result[2];
-            y2 = result[3];
-            double theta = Math.PI / 2;
-            if (x1 != x2) {
-                double k = (double) (y1 - y2) / (double) (x2 - x1);
-                theta = Math.atan(k);
-            }
-            double span = 2; //线性插值的间隔
-            Point pointStart = new Point(x1,y1);
-            Point pointTemp = new Point(x1,y1);
-            int spanTimes = 1;
-            if (theta > 0){ // 顺时针倾斜
-                if (y1 > y2){ //起点在终点下方
-                    while(pointTemp.getY() >= y2 && pointTemp.getX() <= x2){
-                        stackAllDrawPoint.push((Point) pointTemp.clone());
-                        pointTemp.y = (int)(pointStart.getY() - spanTimes*span*Math.sin(theta));
-                        pointTemp.x =  (int)(pointStart.getX() + spanTimes*span*Math.cos(theta));
-                        spanTimes++;
-                    }
-                    stackAllDrawPoint.push(new Point(x2,y2));
-                }else{ //起点在上方
-                    while(pointTemp.getY() <= y2 && pointTemp.getX() >= x2){
-                        stackAllDrawPoint.push((Point) pointTemp.clone());
-                        pointTemp.y = (int)(pointStart.getY() + spanTimes*span*Math.sin(theta));
-                        pointTemp.x =  (int)(pointStart.getX() - spanTimes*span*Math.cos(theta));
-                        spanTimes++;
-                    }
-                    stackAllDrawPoint.push(new Point(x2,y2));
+                double radius = start.getWidth() / 2;
+                int result[] = optimizePoint(x1, y1, x2, y2, radius); //优化点的显示
+                x1 = result[0];
+                y1 = result[1];
+                x2 = result[2];
+                y2 = result[3];
+                double theta = Math.PI / 2;
+                if (x1 != x2) {
+                    double k = (double) (y1 - y2) / (double) (x2 - x1);
+                    theta = Math.atan(k);
                 }
-            }else if(theta < 0){ // 逆顺时针倾斜
-                if (y1 > y2){ //起点在终点下方
-                    while(pointTemp.getY() >= y2 && pointTemp.getX() >= x2){
-                        stackAllDrawPoint.push((Point) pointTemp.clone());
-                        pointTemp.y = (int)(pointStart.getY() - spanTimes*span*Math.sin(-theta));
-                        pointTemp.x =  (int)(pointStart.getX() - spanTimes*span*Math.cos(-theta));
-                        spanTimes++;
+                double span = 2; //线性插值的间隔
+                Point pointStart = new Point(x1, y1);
+                Point pointTemp = new Point(x1, y1);
+                int spanTimes = 1;
+                if (theta > 0) { // 顺时针倾斜
+                    if (y1 > y2) { //起点在终点下方
+                        while (pointTemp.getY() >= y2 && pointTemp.getX() <= x2) {
+                            stackAllDrawPoint.push((Point) pointTemp.clone());
+                            pointTemp.y = (int) (pointStart.getY() - spanTimes * span * Math.sin(theta));
+                            pointTemp.x = (int) (pointStart.getX() + spanTimes * span * Math.cos(theta));
+                            spanTimes++;
+                        }
+                        stackAllDrawPoint.push(new Point(x2, y2));
+                    } else { //起点在上方
+                        while (pointTemp.getY() <= y2 && pointTemp.getX() >= x2) {
+                            stackAllDrawPoint.push((Point) pointTemp.clone());
+                            pointTemp.y = (int) (pointStart.getY() + spanTimes * span * Math.sin(theta));
+                            pointTemp.x = (int) (pointStart.getX() - spanTimes * span * Math.cos(theta));
+                            spanTimes++;
+                        }
+                        stackAllDrawPoint.push(new Point(x2, y2));
                     }
-                    stackAllDrawPoint.push(new Point(x2,y2));
-                }else{
-                    while(pointTemp.getY() <= y2 && pointTemp.getX() <= x2){//起点在上方
-                        stackAllDrawPoint.push((Point) pointTemp.clone());
-                        pointTemp.y = (int)(pointStart.getY() + spanTimes*span*Math.sin(-theta));
-                        pointTemp.x =  (int)(pointStart.getX() + spanTimes*span*Math.cos(-theta));
-                        spanTimes++;
+                } else if (theta < 0) { // 逆顺时针倾斜
+                    if (y1 > y2) { //起点在终点下方
+                        while (pointTemp.getY() >= y2 && pointTemp.getX() >= x2) {
+                            stackAllDrawPoint.push((Point) pointTemp.clone());
+                            pointTemp.y = (int) (pointStart.getY() - spanTimes * span * Math.sin(-theta));
+                            pointTemp.x = (int) (pointStart.getX() - spanTimes * span * Math.cos(-theta));
+                            spanTimes++;
+                        }
+                        stackAllDrawPoint.push(new Point(x2, y2));
+                    } else {
+                        while (pointTemp.getY() <= y2 && pointTemp.getX() <= x2) {//起点在上方
+                            stackAllDrawPoint.push((Point) pointTemp.clone());
+                            pointTemp.y = (int) (pointStart.getY() + spanTimes * span * Math.sin(-theta));
+                            pointTemp.x = (int) (pointStart.getX() + spanTimes * span * Math.cos(-theta));
+                            spanTimes++;
+                        }
+                        stackAllDrawPoint.push(new Point(x2, y2));
                     }
-                    stackAllDrawPoint.push(new Point(x2,y2));
-                }
 
-            }else {
-                if (x1 > x2) {
-                    while(pointTemp.getX() >= x2){//起点在右边
-                        stackAllDrawPoint.push((Point) pointTemp.clone());
-                        pointTemp.x -= span;
-                    }
-                    stackAllDrawPoint.push(new Point(x2,y2));
                 } else {
-                    while(pointTemp.getX() <= x2){//起点在左边
-                        stackAllDrawPoint.push((Point) pointTemp.clone());
-                        pointTemp.x += span;
+                    if (x1 > x2) {
+                        while (pointTemp.getX() >= x2) {//起点在右边
+                            stackAllDrawPoint.push((Point) pointTemp.clone());
+                            pointTemp.x -= span;
+                        }
+                        stackAllDrawPoint.push(new Point(x2, y2));
+                    } else {
+                        while (pointTemp.getX() <= x2) {//起点在左边
+                            stackAllDrawPoint.push((Point) pointTemp.clone());
+                            pointTemp.x += span;
+                        }
+                        stackAllDrawPoint.push(new Point(x2, y2));
                     }
-                    stackAllDrawPoint.push(new Point(x2,y2));
                 }
             }
+            listAllStackDrawPoint.add((Stack<Point>) stackAllDrawPoint.clone());
         }
     }
 
-}
-class Triangle_Shape extends Path2D.Double {
-    public Triangle_Shape(Point2D... points) {
-        moveTo(points[0].getX(), points[0].getY());
-        lineTo(points[1].getX(), points[1].getY());
-        lineTo(points[2].getX(), points[2].getY());
-        closePath();
-    }
 }

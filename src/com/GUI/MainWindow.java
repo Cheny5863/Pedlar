@@ -33,7 +33,6 @@ public class MainWindow extends FramelessWindow {
     public BorderTextField inputCity;
     private ArrayList<String> listLogInfo = new ArrayList<>();
     public RoundBtn btnInputConfirm;
-    public RoundComboBox comboBoxBtnSelector;
     private Color bigBGColor = new Color(245,157,205);
     private Color smallAreaColor = new Color(245,109,183);
     private Color btnColor = new Color(244,145,199);
@@ -143,16 +142,23 @@ public class MainWindow extends FramelessWindow {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (!inputCity.getText().equals(new String("请输入录入房间个数"))) {
-                    //点击后禁用确认按键
-                    btnInputConfirm.setEnabled(false);
-                    //创建一个弹出窗口
-                    PopupInputer frameInput = new PopupInputer(270, 430, that);
                     int inputMount = Integer.parseInt(inputCity.getText());
-                    frameInput.setInputMount(inputMount);
-                    if (inputMount > 1) {
-                        frameInput.btnConfirm.setText("下一个");
+                    int curMountOfCityBtn = paintPad.getCityNum();
+                    while(inputMount-- > 0){
+                        /*加按钮*/
+                        CityBtn btn = new CityBtn(that, ++curMountOfCityBtn);
+                        paintPad.setCityNum(curMountOfCityBtn);
+                        int xOld = 50;
+                        int yOld = 50;
+                        btn.setLocation(xOld, yOld);
+                        btn.labelCityName.setBounds(xOld - 25, yOld + btn.getHeight() / 2 + 5, btn.getWidth() + 50, btn.getHeight() + 10);
+                        btn.setBackground(new Color(239, 187, 222));
+                        btn.setClicked(true);
+                        paintPad.listCityBtn.add(btn);
+                        paintPad.add(btn);
+                        paintPad.add(btn.labelCityName);
                     }
-                    frameInput.labelTitle.setText("请输入第1个房间信息");
+
                 } else {
                     logToWindow("请先输入待录入房间个数");
                 }
@@ -170,7 +176,7 @@ public class MainWindow extends FramelessWindow {
         curCityTop.setBackground(null);
         curCityBottom.setBackground(null);
         curCityTop.setPreferredSize(new Dimension(curCityArea.getWidth(), 30));
-        curCityBottom.setPreferredSize(new Dimension(curCityArea.getWidth(), 400));
+        curCityBottom.setPreferredSize(new Dimension(curCityArea.getWidth(), 200));
         //设置标题和文字大小
         curCityTop.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 4));
 
@@ -190,35 +196,24 @@ public class MainWindow extends FramelessWindow {
         curCityArea.add(curCityBottom);
 
         //当前房间下部分组件
-        curCityBottom.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 0));
-
-        //设置文本域的参数
-        roundTextArea = new RoundTextArea(20, 20, 180, 80, false, null);
-        roundTextArea.textAreaReal.setBackground(textAreaColor);
-        roundTextArea.textAreaReal.setForeground(Color.white);
-        //roundTextArea.textAreaReal.setEditable(false);
-        roundTextArea.textAreaReal.setFont(new Font("微软雅黑", Font.BOLD, 12));
-        roundTextArea.setAutoscrolls(true);
-        roundTextArea.setBackground(textAreaColor);
-        RoundBtn btnDeleConfirm = new RoundBtn(20, 20, 60, 20);
+        curCityBottom.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 20));
+        RoundBtn btnDeleConfirm = new RoundBtn(20, 20, 100, 50);
         btnDeleConfirm.setBackground(btnColor);
         btnDeleConfirm.setText("删除");
-
-        RoundBtn btnRevise = new RoundBtn(20, 20, 60, 30);
+        btnDeleConfirm.setFont(new Font("微软雅黑",Font.BOLD,24));
+        RoundBtn btnRevise = new RoundBtn(20, 20, 100, 50);
         btnRevise.setBackground(btnColor);
         btnRevise.setText("修改");
-
+        btnRevise.setFont(new Font("微软雅黑",Font.BOLD,24));
         btnRevise.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (cityBtnCurrent != null) {
                     cityBtnCurrent.labelCityName.setText(textFieldCityName.getText());
                     cityBtnCurrent.setStrCityInfo(roundTextArea.textAreaReal.getText());
-                    updateComboBox();//修改按钮后需要更新下拉框
                 } else {
                     logToWindow("当前还没有选中房间");
                 }
-
             }
         });
 
@@ -236,13 +231,9 @@ public class MainWindow extends FramelessWindow {
             }
         });
 
-        Box boxBtnContainer = new Box(BoxLayout.Y_AXIS);
-        boxBtnContainer.add(btnRevise);
-        boxBtnContainer.add(Box.createVerticalStrut(20));
-        boxBtnContainer.add(btnDeleConfirm);
 
-        curCityBottom.add(roundTextArea);
-        curCityBottom.add(boxBtnContainer);
+        curCityBottom.add(btnRevise);
+        curCityBottom.add(btnDeleConfirm);
 
 
         //出发区内部组件
@@ -250,58 +241,47 @@ public class MainWindow extends FramelessWindow {
         JPanel departTop, departBottom;
         departTop = new JPanel();
         departBottom = new JPanel();
-        controller.add(departTop);
-        controller.add(Box.createVerticalStrut(50));
         controller.add(departBottom);
         //设置上下两部分的属性
         departTop.setBackground(null);
         departBottom.setBackground(null);
         departBottom.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 0));
-        departTop.setPreferredSize(new Dimension(controller.getWidth(), 200));
+        departTop.setPreferredSize(new Dimension(controller.getWidth(), 100));
         departBottom.setPreferredSize(new Dimension(controller.getWidth(), 100));
         //设置标题和文字大小
         departTop.setLayout(new FlowLayout(FlowLayout.LEFT, 20, 10));
-        comboBoxBtnSelector = new RoundComboBox();
-        comboBoxBtnSelector.setPreferredSize(new Dimension(100, 20));
 
-        JLabel titleDepart = new JLabel("前往: ");
+
+        JLabel titleDepart = new JLabel("确认: ");
         titleDepart.setFont(new Font("微软雅黑", Font.BOLD, 15));
         titleDepart.setForeground(Color.white);
         //将标题添加至panel
         departTop.add(titleDepart);
-        departTop.add(comboBoxBtnSelector);
         //将按钮添加至panel
         RoundBtn btnDepart = new RoundBtn(15, 15, 100, 50);
         btnDepart.setBackground(btnColor);
-        btnDepart.setText("Go");
-        btnDepart.setFont(new Font("微软雅黑", Font.BOLD, 36));
+        btnDepart.setText("开始");
+        btnDepart.setFont(new Font("微软雅黑", Font.BOLD, 24));
         departBottom.add(btnDepart);
         departureArea.add(departTop);
         departureArea.add(departBottom);
         btnDepart.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                CityBtn cityBtnDestination = (CityBtn) (comboBoxBtnSelector.getSelectedItem());
-                if (cityBtnDestination == null) {
-                    logToWindow("请先选择目的地");
-                    return;
-                }else if(cityBtnDestination.equals(cityBtnCurrent)){
-                    logToWindow("不能自己到自己");
-                } else{
-                    PathResolver pathResolver = new PathResolver();
-                    pathResolver.collectAllPath(new CityBtnAccessible(cityBtnCurrent,0),cityBtnDestination,paintPad.listCityBtn.size());
+                if (cityBtnCurrent != null){
+                    PathResolver pathResolver = new PathResolver(paintPad.listCityBtn);
+                    pathResolver.generateSmallestTree(new CityBtnAccessible(cityBtnCurrent,0));
 
-                    Path pathShortest = Path.getShortest(pathResolver.listAllPath);
-                    if (pathShortest == null)
-                        logToWindow("这两个房间不相通");
+                    if (pathResolver.listAllPath == null)
+                        logToWindow("未找到最小树");
                     else{
-                        paintPad.setPathShortest(pathShortest);
+                        paintPad.setListSmallestTree(pathResolver.listAllPath);
                         paintPad.drawnPathWithAnimation();
                         logToWindow("这两个房间是相通的!");
                     }
-
+                }else{
+                    logToWindow("请选择起点");
                 }
-
 
             }
         });
@@ -350,13 +330,6 @@ public class MainWindow extends FramelessWindow {
         timer.schedule(task, 2000);
     }
 
-    public void updateComboBox() {
-        comboBoxBtnSelector.removeAllItems();
-        for (CityBtn temp :
-                paintPad.listCityBtn) {
-            comboBoxBtnSelector.addItem(temp);
-        }
-    }
 
     public boolean isOrigin(CityBtn another){ //返回传入的房间是否是起点
         return cityBtnCurrent.equals(another);

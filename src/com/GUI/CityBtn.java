@@ -40,8 +40,11 @@ public class CityBtn extends JButton {
     public ArrayList<ArcInfo> listArcInfo = new ArrayList<>();
     public MainWindow frameMainWindow;
     public JLabel labelCityName;
-    private boolean isClicked = false;
 
+    private boolean isVisted = false;
+
+
+    private boolean isClicked = false;
     public String getStrCityInfo() {
         return strCityInfo;
     }
@@ -58,10 +61,20 @@ public class CityBtn extends JButton {
         this.strCityInfo = strCityInfo;
     }
 
+    public boolean isClicked() {
+        return isClicked;
+    }
+
     public void setClicked(boolean clicked) {
         isClicked = clicked;
     }
+    public boolean isVisted() {
+        return isVisted;
+    }
 
+    public void setVisted(boolean visted) {
+        isVisted = visted;
+    }
 
 
 
@@ -84,7 +97,7 @@ public class CityBtn extends JButton {
         this.frameMainWindow = frameMainWindow;
         parent = (RoundPanel) this.getParent();
         labelCityName = new JLabel();
-
+        labelCityName.setText(Integer.toString(id));
         setPreferredSize(new Dimension(btnWidth, btnHeight));
         setSize(btnWidth, btnHeight);
         Font font = new Font("微软雅黑", Font.BOLD, 14);
@@ -117,17 +130,15 @@ public class CityBtn extends JButton {
                         //添加边到当前城市
                         if (frameMainWindow.cityBtnCurrent.addArcToVel(that, 0, true)) {
                             frameMainWindow.logToWindow("添加成功");
-                            //that.addArcToVel(frameMainWindow.cityBtnCurrent, 0, false);//添加成功则添加反向的边
+                            that.addArcToVel(frameMainWindow.cityBtnCurrent, 0, false);//添加成功则添加反向的边
                         } else {
                             frameMainWindow.logToWindow("边重复");
-                        }
-                        ;
+                        };
 
                         frameMainWindow.paintPad.setSettingArc(false);
                     } else {
                         frameMainWindow.cityBtnCurrent = that;
                         frameMainWindow.textFieldCityName.setText(labelCityName.getText());
-                        frameMainWindow.roundTextArea.textAreaReal.setText(strCityInfo);
                         Component cp = (Component) e.getSource(); //获取事件e的触发源
                         //当鼠标点下的时候记录组件当前的坐标与鼠标当前在屏幕的位置
                         //System.out.println(cp.getX() + "  "+cp.getY());
