@@ -7,6 +7,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -37,7 +38,7 @@ public class MainWindow extends FramelessWindow {
     private Color smallAreaColor = new Color(245,109,183);
     private Color btnColor = new Color(244,145,199);
     private Color textAreaColor = new Color(238,137,198);
-
+    private int triggerTimes = 0;
 
     public MainWindow() {
         super();
@@ -211,18 +212,6 @@ public class MainWindow extends FramelessWindow {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (cityBtnCurrent != null) {
-                    boolean ifChange = true;
-//                    for (CityBtn cityBtnTemp: paintPad.listCityBtn){
-//                        if (cityBtnTemp.toString().equals(textFieldCityName.getText())){
-//                            logToWindow("修改失败！已存在重名房间");
-//                            ifChange = false;
-//                        }
-//                    }
-//                    if (ifChange){
-//                        cityBtnCurrent.labelCityName.setText(textFieldCityName.getText());
-//                        cityBtnCurrent.setStrCityInfo(roundTextArea.textAreaReal.getText());
-//                        logToWindow("修改成功!!!");
-//                    }
                     cityBtnCurrent.labelCityName.setText(textFieldCityName.getText());
                     cityBtnCurrent.setStrCityInfo(roundTextArea.textAreaReal.getText());
                     updateComboBox();//修改按钮后需要更新下拉框
@@ -296,21 +285,19 @@ public class MainWindow extends FramelessWindow {
                 if (cityBtnDestination == null) {
                     logToWindow("请先选择目的地");
                     return;
-                }else{
+                }else if(cityBtnDestination.equals(cityBtnCurrent)){
+                    logToWindow("不能自己到自己");
+                } else{
                     PathResolver pathResolver = new PathResolver();
                     pathResolver.collectAllPath(new CityBtnAccessible(cityBtnCurrent,0),cityBtnDestination,paintPad.listCityBtn.size());
 
-                    for (Path pathTemp :
-                            pathResolver.listAllPath) {
-                        logToWindow(pathTemp.toString());
-                    }
                     Path pathShortest = Path.getShortest(pathResolver.listAllPath);
                     if (pathShortest == null)
-                        logToWindow("对不起没找到符合条件的路径，这两个房间不相通");
+                        logToWindow("这两个房间不相通");
                     else{
                         paintPad.setPathShortest(pathShortest);
                         paintPad.drawnPathWithAnimation();
-                        logToWindow("右击面板可以取消最短路径的绘制噢！");
+                        logToWindow("这两个房间是相通的!");
                     }
 
                 }
@@ -345,13 +332,20 @@ public class MainWindow extends FramelessWindow {
         TimerTask task = new TimerTask() {
             @Override
             public void run() {
-                // 重写 run() 方法，返回系统时间
-                System.out.println(sth);
+                System.out.println(triggerTimes);
+                if (triggerTimes == 1){
+                    // 重写 run() 方法，返回系统时间
+                    System.out.println(sth);
+                    paintPad.textFieldTips.setText("");
 
+                }
+                triggerTimes--;
             }
         };
         Timer timer = new Timer();
-
+        triggerTimes++;
+        paintPad.textFieldTips.setForeground(textAreaColor);
+        paintPad.textFieldTips.setText(sth);
         // 在经过 2000 毫秒的初始化延时后执行一次（单词执行）
         timer.schedule(task, 2000);
     }

@@ -7,10 +7,13 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 import javax.swing.Timer;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
@@ -36,6 +39,8 @@ public class CityChessPanel extends RoundPanel {
     private boolean isInputing = false;
     private Path pathShortest = null;
     private boolean isKeepPath = false;
+    public JTextField textFieldTips = new JTextField();
+
     public boolean isDrawedPath() {
         return isDrawedPath;
     }
@@ -110,6 +115,14 @@ public class CityChessPanel extends RoundPanel {
     public CityChessPanel(int arcw, int arch, MainWindow frameMainWindow) {
         super(arcw, arch);
 
+        textFieldTips.setBorder(null);
+        textFieldTips.setBounds(300,10,200,30);
+        textFieldTips.setBackground(null);
+        textFieldTips.setHorizontalAlignment(SwingConstants.CENTER);
+        textFieldTips.setFont(new Font("微软雅黑",Font.BOLD,16));
+        textFieldTips.setEditable(false);
+        //textFieldTips.setText("PASS");
+        this.add(textFieldTips);
         this.frameMainWindow = frameMainWindow;
         addMouseMotionListener(new MouseAdapter() {
             @Override
