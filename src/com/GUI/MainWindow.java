@@ -266,7 +266,11 @@ public class MainWindow extends FramelessWindow {
                 if (cityBtnCurrent != null){
                     PathResolver pathResolver = new PathResolver(paintPad.listCityBtn);
                     pathResolver.generateSmallestTree(new CityBtnAccessible(cityBtnCurrent,0));
-
+                    int distanceTotal = 0;
+                    for (ArcInfo arcInfo :
+                            pathResolver.listArcResult)
+                        distanceTotal += arcInfo.getmDistance();
+                    logToWindow("已找到最小生成树，代价为："+Integer.toString(distanceTotal));
                     paintPad.setListSmallestTree(pathResolver.listAllPath);
                     paintPad.drawnPathWithAnimation();
                 }else{
