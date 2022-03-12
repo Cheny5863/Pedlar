@@ -36,6 +36,7 @@ public class CityBtn extends JButton {
     private int lastX = 0;
     private int lastY = 0;
     private int id = 0;
+    public CityBtn cityBtnParent = null;
     private String strCityInfo = new String();
     public ArrayList<ArcInfo> listArcInfo = new ArrayList<>();
     public MainWindow frameMainWindow;
@@ -75,7 +76,6 @@ public class CityBtn extends JButton {
     public void setVisted(boolean visted) {
         isVisted = visted;
     }
-
 
 
     ActionListener taskPerformer = new ActionListener() {
@@ -130,9 +130,10 @@ public class CityBtn extends JButton {
                         //添加边到当前城市
                         if (frameMainWindow.cityBtnCurrent.addArcToVel(that, 0, true)) {
                             frameMainWindow.logToWindow("添加成功");
-                            that.addArcToVel(frameMainWindow.cityBtnCurrent, 0, false);//添加成功则添加反向的边
+                            //that.addArcToVel(frameMainWindow.cityBtnCurrent, 0, false);//添加成功则添加反向的边
                         } else {
                             frameMainWindow.logToWindow("边重复");
+                            frameMainWindow.paintPad.setSettingArc(false);
                         };
 
                         frameMainWindow.paintPad.setSettingArc(false);
@@ -265,7 +266,18 @@ public class CityBtn extends JButton {
             if (tempArc.equal(arcInfo)) {//已经添加过这条边，就不加了
                 System.out.println("已经添加过这条边");
                 frameMainWindow.paintPad.setSettingArc(false);
-                frameMainWindow.paintPad.setInputing(true);
+                frameMainWindow.paintPad.setInputing(false);
+
+                return false;
+            }
+        }
+
+        for (ArcInfo tempArc :
+                target.listArcInfo) {
+            if (tempArc.equal(arcInfo)) {//已经添加过这条边，就不加了
+                System.out.println("已经添加过这条边");
+                frameMainWindow.paintPad.setSettingArc(false);
+                frameMainWindow.paintPad.setInputing(false);
 
                 return false;
             }

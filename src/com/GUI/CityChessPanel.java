@@ -37,16 +37,17 @@ public class CityChessPanel extends RoundPanel {
     public ArrayList<CityBtn> listCityBtn = new ArrayList<>();
     public MainWindow frameMainWindow;
     private boolean isInputing = false;
-
     public void setListSmallestTree(ArrayList<Path> listSmallestTree) {
         this.listSmallestTree = listSmallestTree;
     }
-
     private ArrayList<Path> listSmallestTree = null;
     private boolean isKeepPath = false;
     public JTextField textFieldTips = new JTextField();
+    private boolean isDrawedPath = true;
+    private int locationCurDrawed = 0;
+    private int indexCurDrawed = 0;
 
-
+    ArrayList<Stack<Point>> listAllStackDrawPoint = new ArrayList<>();
     public boolean isDrawedPath() {
         return isDrawedPath;
     }
@@ -54,12 +55,6 @@ public class CityChessPanel extends RoundPanel {
     public void setDrawedPath(boolean drawedPath) {
         isDrawedPath = drawedPath;
     }
-
-    private boolean isDrawedPath = true;
-    private int locationCurDrawed = 0;
-    private int indexCurDrawed = 0;
-    ArrayList<Stack<Point>> listAllStackDrawPoint = new ArrayList<>();
-
     public boolean isKeepPath() {
         return isKeepPath;
     }
@@ -324,7 +319,6 @@ public class CityChessPanel extends RoundPanel {
             int count = listCityBtn.size();//删除时按添加的先后顺序删除
             frameMainWindow.cityBtnCurrent = listCityBtn.get(count - 1);
             frameMainWindow.textFieldCityName.setText(frameMainWindow.cityBtnCurrent.labelCityName.getText());
-            frameMainWindow.roundTextArea.textAreaReal.setText(frameMainWindow.cityBtnCurrent.getStrCityInfo());
         }
         repaint();
     }

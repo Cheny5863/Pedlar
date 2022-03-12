@@ -4,53 +4,54 @@ import javafx.scene.AccessibleAction;
 import javafx.scene.shape.Arc;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 
 public class PathResolver extends Path{
-    public  ArrayList<Path> listAllPath = new ArrayList<>();
-    private  Path pathTemp = new Path(0);
     private ArrayList<CityBtn> listAllCityBtn;
-    private int positionRecall = -1;
-    private int positionSub = 0;//上一次分割的位置
-
+    public ArrayList<ArcInfo> listArcResult = new ArrayList<>();
+    private ArrayList<ArcInfo> listAllArc = new ArrayList<>(); //所有边
+    public ArrayList<Path> listAllPath = new ArrayList<>();
     public PathResolver(ArrayList<CityBtn> listAllCityBtn){
         this.listAllCityBtn = listAllCityBtn;
+
+        for (CityBtn cityBtnTemp : //把所有边都加入链表中，进行排序，用于克里斯卡尔算法
+                listAllCityBtn) {
+            for (ArcInfo arcInfoTemp :
+                    cityBtnTemp.listArcInfo) {
+                listAllArc.add(arcInfoTemp);
+            }
+        }
+
+        listAllArc.sort(new SortByDistance());//进行边的排序
+        System.out.println("------------排序后的边-------------");
+        for (ArcInfo arcInfoTemp :
+                listAllArc) {
+            System.out.println(arcInfoTemp.getmStart() + "->" +arcInfoTemp.getmTarget());
+        }
+        System.out.println("-------------------------");
         for (CityBtn cityBtn ://把所有点的访问状态重置
                 listAllCityBtn) {
             cityBtn.setVisted(false);
+            cityBtn.cityBtnParent = null;
         }
     }
 
     public void generateSmallestTree(CityBtnAccessible start){
-        if(start != null){
-            pathTemp.listAllPoint.push(start);
-            start.getTarget().setVisted(true);
-        }else{
-            if (isFinished()){
-                //listAllPath.add(pathTemp);
-                Path pathPartition = new Path(0);//把路径切割后放入路径表
-                for (int i = positionSub; i < pathTemp.listAllPoint.size();i++){
-                    pathPartition.listAllPoint.add(pathTemp.listAllPoint.get(i).clone());
-                }
-                listAllPath.add(pathPartition);
-                return;
-            } //如果已经完成最小生成树的生成
-            if (!pathTemp.listAllPoint.isEmpty()){//如果路径非空说明还能回溯
-                Path pathPartition = new Path(0);//把路径切割后放入路径表
-                for (int i = positionSub; i < pathTemp.listAllPoint.size();i++){
-                    pathPartition.listAllPoint.add(pathTemp.listAllPoint.get(i).clone());
-                }
-                listAllPath.add(pathPartition);
-                positionSub = pathTemp.listAllPoint.size();
-                positionRecall = positionRecall==-1? (pathTemp.listAllPoint.size()-2) : (positionRecall-1);
-                generateSmallestTree(pathTemp.listAllPoint.get(positionRecall));
-                return;
+        for (ArcInfo arcInfo :
+                listAllArc) {
+            CityBtn rootOfStart = findRoot(arcInfo.getmStart());
+            CityBtn rootOfEnd = findRoot(arcInfo.getmTarget());
+
+            if (!rootOfStart.equals(rootOfEnd)){
+                listArcResult.add(arcInfo);
+                Path pathTemp = new Path(0);
+                pathTemp.listAllPoint.push(new CityBtnAccessible(arcInfo.getmStart(),0));
+                pathTemp.listAllPoint.push(new CityBtnAccessible(arcInfo.getmTarget(),0));
+                listAllPath.add(pathTemp);
+                rootOfEnd.cityBtnParent = rootOfStart; //合并生成树
+                if (listArcResult.size() == listAllCityBtn.size()-1)
+                    return;
             }
-        }
-        CityBtnAccessible cityBtnAccessible = getFitNode(start.getTarget());
-        if (cityBtnAccessible != null){
-            generateSmallestTree(cityBtnAccessible);
-        }else{
-            generateSmallestTree(null);
         }
     }
 
@@ -75,12 +76,23 @@ public class PathResolver extends Path{
                 if (arcInfo.getmDistance() < arcFit.getmDistance()) {
                     arcFit = arcInfo;
                 }
-
             }
-
         }
         return arcFit.getmDistance() == Integer.MAX_VALUE?
                 null : new CityBtnAccessible(arcFit.getmTarget(),arcFit.getmDistance());
     }
+    private CityBtn findRoot(CityBtn vertex){
+        CityBtn result = vertex;
+        while (result.cityBtnParent != null){
+            result = result.cityBtnParent;
+        }
+        return result;
+    }
 
+}
+class SortByDistance implements Comparator<ArcInfo> {
+    public int compare(ArcInfo a, ArcInfo b)
+    {
+        return a.getmDistance() - b.getmDistance();
+    }
 }

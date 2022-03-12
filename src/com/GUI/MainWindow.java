@@ -7,7 +7,6 @@ import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -16,10 +15,7 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.Stack;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -222,7 +218,6 @@ public class MainWindow extends FramelessWindow {
             public void actionPerformed(ActionEvent e) {
                 if (cityBtnCurrent != null) {
                     textFieldCityName.setText("");
-                    roundTextArea.textAreaReal.setText("");
                     paintPad.deleteBtn();
                 } else {
                     logToWindow("当前还没有选中房间");
@@ -272,13 +267,8 @@ public class MainWindow extends FramelessWindow {
                     PathResolver pathResolver = new PathResolver(paintPad.listCityBtn);
                     pathResolver.generateSmallestTree(new CityBtnAccessible(cityBtnCurrent,0));
 
-                    if (pathResolver.listAllPath == null)
-                        logToWindow("未找到最小树");
-                    else{
-                        paintPad.setListSmallestTree(pathResolver.listAllPath);
-                        paintPad.drawnPathWithAnimation();
-                        logToWindow("这两个房间是相通的!");
-                    }
+                    paintPad.setListSmallestTree(pathResolver.listAllPath);
+                    paintPad.drawnPathWithAnimation();
                 }else{
                     logToWindow("请选择起点");
                 }
@@ -312,10 +302,10 @@ public class MainWindow extends FramelessWindow {
         TimerTask task = new TimerTask() {
             @Override
             public void run() {
-                System.out.println(triggerTimes);
+                //System.out.println(triggerTimes);
                 if (triggerTimes == 1){
                     // 重写 run() 方法，返回系统时间
-                    System.out.println(sth);
+                    //System.out.println(sth);
                     paintPad.textFieldTips.setText("");
 
                 }
